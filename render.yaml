@@ -2,6 +2,7 @@ services:
   - type: web
     name: lab-backend
     runtime: node
+    plan: free
     rootDir: backend
     buildCommand: npm ci --include=dev && npm run build
     startCommand: node dist/main
@@ -24,6 +25,7 @@ services:
   - type: web
     name: lab-frontend
     runtime: node
+    plan: free
     rootDir: frontend
     buildCommand: npm ci && npm run build
     startCommand: npm run start
