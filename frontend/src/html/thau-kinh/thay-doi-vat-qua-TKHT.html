@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>Bài 14. Vẽ ảnh vật AB qua thấu kính hội tụ — kéo thả đổi hình dạng</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 16px; background: #f5f6fa; color: #222; }
+h1 { font-size: 18px; margin: 0 0 12px; max-width: 1100px; line-height: 1.35; }
+.back { display: inline-block; margin-bottom: 12px; padding: 8px 14px; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #6a1b9a; text-decoration: none; font-weight: 600; font-size: 14px; }
+.back:hover { background: #f3e5f5; }
+.wrap { display: flex; gap: 16px; flex-wrap: nowrap; align-items: flex-start; width: 100%; }
+canvas { flex: 1 1 0; width: 100%; min-width: 0; background: #fff; border: 1px solid #ccc; border-radius: 6px; cursor: grab; }
+.panel { flex: 0 0 250px; width: 250px; box-sizing: border-box; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 12px 16px; }
+.panel label { display: block; margin-top: 10px; font-weight: 600; font-size: 14px; }
+.panel input[type=range], .panel input[type=number] { width: 100%; }
+.panel button { margin-top: 10px; padding: 8px 12px; cursor: pointer; }
+.result { margin-top: 14px; line-height: 1.7; font-size: 14px; }
+.result b { color: #6a1b9a; }
+.note { font-size: 13px; color: #555; margin-top: 12px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Quay lại</a>
+<h1>Bài 14. Vẽ ảnh vật AB qua thấu kính hội tụ — kéo thả đổi hình dạng</h1>
+<div class="wrap">
+  <canvas id="cv" width="1000" height="560"></canvas>
+  <div class="panel">
+
+    <label>Tiêu cự f = <span id="fVal"></span> cm</label>
+    <input id="fIn" type="range" min="4" max="20" step="0.5" value="10" />
+    <p class="note">Kéo <b>A</b> và <b>B</b> riêng biệt (độc lập x, y). Ảnh A′B′ theo 1/d + 1/d′ = 1/f.</p>
+
+    <div class="result" id="result"></div>
+    <p class="note" id="note"></p>
+  </div>
+</div>
+<script>
+
+const canvas = document.getElementById('cv');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+function clear() { ctx.clearRect(0, 0, W, H); }
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+function mouse(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height };
+}
+function line(a, b, { color = '#333', width = 2, dash = [] } = {}) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.restore();
+}
+function fillCircle(p, r, color) {
+  ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+}
+function label(t, p, color = '#222', ox = 8, oy = -8) {
+  ctx.fillStyle = color; ctx.font = '14px system-ui'; ctx.fillText(t, p.x + ox, p.y + oy);
+}
+function arrow(a, b, color) {
+  line(a, b, { color, width: 2 });
+  const ang = Math.atan2(b.y - a.y, b.x - a.x);
+  ctx.save(); ctx.fillStyle = color; ctx.beginPath();
+  ctx.moveTo(b.x, b.y);
+  ctx.lineTo(b.x - 10 * Math.cos(ang - 0.4), b.y - 10 * Math.sin(ang - 0.4));
+  ctx.lineTo(b.x - 10 * Math.cos(ang + 0.4), b.y - 10 * Math.sin(ang + 0.4));
+  ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function reflect(dir, normal) {
+  const n = Math.hypot(normal.x, normal.y) || 1;
+  const nx = normal.x / n, ny = normal.y / n;
+  const d = 2 * (dir.x * nx + dir.y * ny);
+  return { x: dir.x - d * nx, y: dir.y - d * ny };
+}
+function normalize(v) {
+  const n = Math.hypot(v.x, v.y) || 1;
+  return { x: v.x / n, y: v.y / n };
+}
+function toDeg(r) { return r * 180 / Math.PI; }
+function toRad(d) { return d * Math.PI / 180; }
+let drag = null;
+canvas.addEventListener('mousedown', (e) => { drag = hitTest(mouse(e)); });
+window.addEventListener('mouseup', () => { drag = null; });
+canvas.addEventListener('mousemove', (e) => {
+  const p = mouse(e);
+
+  if (!drag) {
+    const hit = hitTest(p);
+    canvas.style.cursor = hit ? 'grab' : 'default';
+
+    return;
+  }
+
+  onDrag(drag, p);
+  render();
+});
+
+
+const SCALE = 10, OX = W / 2, OY = H / 2;
+const state = { f: 10, A: { x: -28, y: -2 }, B: { x: -22, y: 8 } };
+document.getElementById('fIn').oninput = () => render();
+function toPx(p) { return { x: OX + p.x * SCALE, y: OY - p.y * SCALE }; }
+function toW(p) { return { x: (p.x - OX) / SCALE, y: (OY - p.y) / SCALE }; }
+function imagePoint(p) {
+  const d = -p.x, h = p.y, f = state.f;
+  if (Math.abs(d - f) < 0.05) return null;
+  const dp = (d * f) / (d - f);
+  return { x: dp, y: -h * dp / d };
+}
+function hitTest(p) {
+  if (dist(p, toPx(state.A)) < 12) return 'A';
+  if (dist(p, toPx(state.B)) < 12) return 'B';
+  return null;
+}
+function onDrag(which, p) {
+  const w = toW(p);
+  const pos = {
+    x: clamp(w.x, -45, -2),
+    y: clamp(w.y, -14, 14),
+  };
+
+  if (which === 'A') {
+    state.A = pos;
+  } else if (which === 'B') {
+    state.B = pos;
+  }
+}
+function render() {
+  clear();
+  state.f = +document.getElementById('fIn').value;
+  document.getElementById('fVal').textContent = state.f;
+  line(toPx({ x: -50, y: 0 }), toPx({ x: 50, y: 0 }), { color: '#333', width: 1 });
+  line(toPx({ x: 0, y: -18 }), toPx({ x: 0, y: 18 }), { color: '#000', width: 3 });
+  arrow(toPx({ x: 0, y: 16 }), toPx({ x: 0, y: 18 }), '#000');
+  arrow(toPx({ x: 0, y: -16 }), toPx({ x: 0, y: -18 }), '#000');
+  [[-state.f, 'F'], [state.f, "F'"], [-2 * state.f, '2F'], [2 * state.f, "2F'"]].forEach(([x, t]) => {
+    fillCircle(toPx({ x, y: 0 }), 3.5, '#000'); label(t, toPx({ x, y: 0 }), '#000', -8, 20);
+  });
+  const Ap = imagePoint(state.A);
+  const Bp = imagePoint(state.B);
+
+  /** Hai tia tới chính: song song trục → qua F′; qua quang tâm O */
+  function drawPrincipalRays(P, Pp, colPar, colCenter) {
+    const hitLens = { x: 0, y: P.y };
+    // Tia 1: tới song song trục chính
+    arrow(toPx(P), toPx(hitLens), colPar);
+
+    if (Pp) {
+      // Sau TK: hướng về F' (x = f, y = 0)
+      const endY = P.y + (0 - P.y) / (state.f - 0) * (45 - 0);
+      arrow(toPx(hitLens), toPx({ x: 45, y: endY }), colPar);
+
+      if (Pp.x < 0) {
+        line(toPx(hitLens), toPx(Pp), { color: colPar, width: 1, dash: [5, 4] });
+      }
+    }
+
+    // Tia 2: tới qua quang tâm O
+    arrow(toPx(P), toPx({ x: 0, y: 0 }), colCenter);
+    const slope = (0 - P.y) / (0 - P.x || 1e-9);
+    arrow(toPx({ x: 0, y: 0 }), toPx({ x: 45, y: slope * 45 }), colCenter);
+
+    if (Pp && Pp.x < 0) {
+      line(toPx({ x: 0, y: 0 }), toPx(Pp), { color: colCenter, width: 1, dash: [5, 4] });
+    }
+  }
+
+  drawPrincipalRays(state.A, Ap, '#1565c0', '#00838f');
+  drawPrincipalRays(state.B, Bp, '#e53935', '#2e7d32');
+
+  line(toPx(state.A), toPx(state.B), { color: '#ef6c00', width: 3 });
+  fillCircle(toPx(state.A), 6, '#ef6c00');
+  fillCircle(toPx(state.B), 6, '#ef6c00');
+  label('A', toPx(state.A));
+  label('B', toPx(state.B));
+
+  if (Ap && Bp) {
+    line(toPx(Ap), toPx(Bp), { color: '#6a1b9a', width: 3, dash: (Ap.x < 0 || Bp.x < 0) ? [6, 4] : [] });
+    fillCircle(toPx(Ap), 5, '#6a1b9a');
+    fillCircle(toPx(Bp), 5, '#6a1b9a');
+    label("A'", toPx(Ap), '#6a1b9a');
+    label("B'", toPx(Bp), '#6a1b9a');
+  }
+  const dA = -state.A.x;
+  const dB = -state.B.x;
+  let html = `A(${state.A.x.toFixed(1)}, ${state.A.y.toFixed(1)}), B(${state.B.x.toFixed(1)}, ${state.B.y.toFixed(1)}) cm<br>`;
+
+  if (Ap && Bp) {
+    html += `A′(${Ap.x.toFixed(1)}, ${Ap.y.toFixed(1)}), B′(${Bp.x.toFixed(1)}, ${Bp.y.toFixed(1)})<br>`;
+    html += `d<sub>A</sub> = ${dA.toFixed(1)} cm, d<sub>B</sub> = ${dB.toFixed(1)} cm`;
+  } else {
+    html += 'Có điểm gần tiêu diện (d ≈ f) → ảnh ở vô cực.';
+  }
+
+  document.getElementById('result').innerHTML = html;
+}
+
+render();
+</script>
+<script src="../canvas-hidpi.js"></script>
+</body>
+</html>

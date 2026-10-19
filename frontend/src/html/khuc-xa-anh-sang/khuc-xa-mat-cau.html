@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>Bài 10. Pháp tuyến và tia khúc xạ tại mặt cầu</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 16px; background: #f5f6fa; color: #222; }
+h1 { font-size: 18px; margin: 0 0 12px; max-width: 1100px; line-height: 1.35; }
+.back { display: inline-block; margin-bottom: 12px; padding: 8px 14px; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #6a1b9a; text-decoration: none; font-weight: 600; font-size: 14px; }
+.back:hover { background: #f3e5f5; }
+.wrap { display: flex; gap: 16px; flex-wrap: nowrap; align-items: flex-start; width: 100%; }
+canvas { flex: 1 1 0; width: 100%; min-width: 0; background: #fff; border: 1px solid #ccc; border-radius: 6px; cursor: default; }
+.panel { flex: 0 0 250px; width: 250px; box-sizing: border-box; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 12px 16px; }
+.panel label { display: block; margin-top: 10px; font-weight: 600; font-size: 14px; }
+.panel input[type=range] { width: 100%; }
+.result { margin-top: 14px; line-height: 1.7; font-size: 14px; }
+.result b { color: #6a1b9a; }
+.note { font-size: 13px; color: #555; margin-top: 12px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Quay lại</a>
+<h1>Bài 10. Pháp tuyến và tia khúc xạ tại mặt cầu</h1>
+<div class="wrap">
+  <canvas id="cv" width="1000" height="560"></canvas>
+  <div class="panel">
+    <label>Chiết suất n₁ (ngoài) = <span id="n1v"></span></label>
+    <input id="n1" type="range" min="1" max="2.5" step="0.01" value="1" />
+    <label>Chiết suất n₂ (trong) = <span id="n2v"></span></label>
+    <input id="n2" type="range" min="1" max="2.5" step="0.01" value="1.5" />
+    <label>Góc tới i = <span id="iVal"></span>°</label>
+    <input id="incAng" type="range" min="-70" max="70" step="0.5" value="30" />
+    <p class="note">S cố định. Chỉnh góc tới i. Tia khúc xạ vào trong cầu rồi khúc xạ ra ngoài tại I′.</p>
+    <div class="result" id="result"></div>
+    <p class="note" id="note"></p>
+  </div>
+</div>
+<script>
+const canvas = document.getElementById('cv');
+const ctx = canvas.getContext('2d');
+const W = canvas.width;
+const H = canvas.height;
+
+function clear() { ctx.clearRect(0, 0, W, H); }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+function line(a, b, { color = '#333', width = 2, dash = [] } = {}) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(b.x, b.y);
+  ctx.stroke();
+  ctx.restore();
+}
+function fillCircle(p, r, color) {
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+function label(t, p, color = '#222', ox = 8, oy = -8) {
+  ctx.fillStyle = color;
+  ctx.font = '14px system-ui';
+  ctx.fillText(t, p.x + ox, p.y + oy);
+}
+function arrow(a, b, color) {
+  line(a, b, { color, width: 2 });
+  const ang = Math.atan2(b.y - a.y, b.x - a.x);
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(b.x, b.y);
+  ctx.lineTo(b.x - 10 * Math.cos(ang - 0.4), b.y - 10 * Math.sin(ang - 0.4));
+  ctx.lineTo(b.x - 10 * Math.cos(ang + 0.4), b.y - 10 * Math.sin(ang + 0.4));
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+function reflect(dir, normal) {
+  const n = Math.hypot(normal.x, normal.y) || 1;
+  const nx = normal.x / n;
+  const ny = normal.y / n;
+  const d = 2 * (dir.x * nx + dir.y * ny);
+
+  return { x: dir.x - d * nx, y: dir.y - d * ny };
+}
+function normalize(v) {
+  const n = Math.hypot(v.x, v.y) || 1;
+
+  return { x: v.x / n, y: v.y / n };
+}
+function dot(a, b) { return a.x * b.x + a.y * b.y; }
+function toDeg(r) { return (r * 180) / Math.PI; }
+function toRad(d) { return (d * Math.PI) / 180; }
+
+const C = { x: W / 2 + 40, y: H / 2 };
+const R = 170;
+const SC = R + 140;
+const S = { x: C.x - SC, y: C.y };
+
+/**
+ * Khúc xạ: eta = n_incident / n_transmitted.
+ * n hướng về phía môi trường tới (ngược hướng tia khi cosi > 0 với cosi = -dot(inc,n)).
+ */
+function refract(inc, n, eta) {
+  const cosi = -dot(inc, n);
+
+  if (cosi <= 0) {
+    return null;
+  }
+
+  const sin2 = eta * eta * (1 - cosi * cosi);
+
+  if (sin2 > 1) {
+    return null;
+  }
+
+  const cosr = Math.sqrt(1 - sin2);
+
+  return normalize({
+    x: eta * inc.x + (eta * cosi - cosr) * n.x,
+    y: eta * inc.y + (eta * cosi - cosr) * n.y,
+  });
+}
+
+function rayCircleHit(origin, dir) {
+  const oc = { x: origin.x - C.x, y: origin.y - C.y };
+  const b = 2 * (oc.x * dir.x + oc.y * dir.y);
+  const c = oc.x * oc.x + oc.y * oc.y - R * R;
+  const disc = b * b - 4 * c;
+
+  if (disc < 0) {
+    return null;
+  }
+
+  const t1 = (-b - Math.sqrt(disc)) / 2;
+  const t2 = (-b + Math.sqrt(disc)) / 2;
+  const t = t1 > 1e-6 ? t1 : t2;
+
+  if (t <= 1e-6) {
+    return null;
+  }
+
+  return { x: origin.x + dir.x * t, y: origin.y + dir.y * t };
+}
+
+/** Tìm I trên mặt cầu sao cho góc tới = i (dấu i: trên/dưới trục). */
+function pointOfIncidence(iDeg) {
+  const i = toRad(Math.abs(iDeg));
+  const sign = iDeg >= 0 ? 1 : -1;
+  const sinBeta = (R * Math.sin(i)) / SC;
+
+  if (sinBeta > 1 - 1e-9) {
+    return null;
+  }
+
+  const beta = Math.asin(sinBeta);
+  const alpha = i - beta;
+  // Quay hướng C→S = (-1,0) một góc ±alpha
+  const ux = -Math.cos(alpha);
+  const uy = -sign * Math.sin(alpha);
+
+  return {
+    I: { x: C.x + R * ux, y: C.y + R * uy },
+    alpha,
+    beta,
+  };
+}
+
+function drawAngleMark(center, fromDir, toDir, labelText, color, radius = 28) {
+  const a0 = Math.atan2(fromDir.y, fromDir.x);
+  const a1 = Math.atan2(toDir.y, toDir.x);
+  let delta = a1 - a0;
+
+  while (delta > Math.PI) {
+    delta -= 2 * Math.PI;
+  }
+
+  while (delta < -Math.PI) {
+    delta += 2 * Math.PI;
+  }
+
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, radius, a0, a0 + delta, delta < 0);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  const mid = a0 + delta / 2;
+  label(labelText, {
+    x: center.x + (radius + 12) * Math.cos(mid),
+    y: center.y + (radius + 12) * Math.sin(mid),
+  }, color, -6, 4);
+}
+
+['n1', 'n2', 'incAng'].forEach((id) => {
+  document.getElementById(id).oninput = () => render();
+});
+
+function render() {
+  clear();
+  const n1 = +document.getElementById('n1').value;
+  const n2 = +document.getElementById('n2').value;
+  const iDeg = +document.getElementById('incAng').value;
+  document.getElementById('n1v').textContent = n1.toFixed(2);
+  document.getElementById('n2v').textContent = n2.toFixed(2);
+  document.getElementById('iVal').textContent = iDeg.toFixed(1);
+
+  // Mặt cầu đầy đủ
+  ctx.beginPath();
+  ctx.arc(C.x, C.y, R, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(21,101,192,0.12)';
+  ctx.fill();
+  ctx.strokeStyle = '#1565c0';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  // Trục quang
+  line({ x: 40, y: C.y }, { x: W - 40, y: C.y }, { color: '#bbb', width: 1, dash: [4, 4] });
+  fillCircle(C, 4, '#000');
+  label('C', C, '#000', 8, 4);
+  label('n₂', { x: C.x + 24, y: C.y - 24 }, '#1565c0', 0, 0);
+  label('n₁', { x: 50, y: 50 }, '#555', 0, 0);
+
+  const poi = pointOfIncidence(iDeg);
+
+  if (!poi) {
+    fillCircle(S, 7, '#e53935');
+    label('S', S);
+    document.getElementById('result').innerHTML = 'Góc tới quá lớn — không có điểm tới hợp lệ.';
+
+    return;
+  }
+
+  const { I } = poi;
+  const N = normalize({ x: I.x - C.x, y: I.y - C.y });
+  const inc = normalize({ x: I.x - S.x, y: I.y - S.y });
+
+  // Pháp tuyến
+  line(
+    { x: I.x - N.x * 55, y: I.y - N.y * 55 },
+    { x: I.x + N.x * 60, y: I.y + N.y * 60 },
+    { color: '#555', width: 1.5, dash: [5, 4] },
+  );
+  label('N', { x: I.x + N.x * 60, y: I.y + N.y * 60 }, '#555');
+  line(C, I, { color: '#9e9e9e', width: 1, dash: [3, 3] });
+
+  // Tia tới
+  arrow(S, I, '#e53935');
+  drawAngleMark(I, N, { x: -inc.x, y: -inc.y }, 'i', '#e53935', 32);
+
+  // Khúc xạ vào trong (n1 → n2), pháp tuyến hướng môi trường tới = ra ngoài N
+  const refr = refract(inc, N, n1 / n2);
+  let msg = '';
+  let msg2 = '';
+
+  if (!refr) {
+    const refd = reflect(inc, N);
+    arrow(I, { x: I.x + refd.x * 180, y: I.y + refd.y * 180 }, '#ef6c00');
+    msg = '<b>Phản xạ toàn phần</b> tại I';
+  } else {
+    const cosi = -dot(inc, N);
+    const sini = Math.sqrt(Math.max(0, 1 - cosi * cosi));
+    const sinr = (n1 / n2) * sini;
+    msg = `Tại I: i = <b>${Math.abs(iDeg).toFixed(1)}°</b>, r = <b>${toDeg(Math.asin(clamp(sinr, -1, 1))).toFixed(1)}°</b>`;
+
+    const exit = rayCircleHit({ x: I.x + refr.x * 2, y: I.y + refr.y * 2 }, refr);
+
+    if (exit) {
+      arrow(I, exit, '#2e7d32');
+      fillCircle(exit, 5, '#2e7d32');
+      label("I'", exit, '#2e7d32', 8, -8);
+
+      const N2 = normalize({ x: exit.x - C.x, y: exit.y - C.y });
+      line(
+        { x: exit.x - N2.x * 40, y: exit.y - N2.y * 40 },
+        { x: exit.x + N2.x * 45, y: exit.y + N2.y * 45 },
+        { color: '#555', width: 1, dash: [4, 4] },
+      );
+
+      // Khúc xạ ra ngoài (n2 → n1): pháp tuyến hướng môi trường tới (trong) = −N2
+      const out = refract(refr, { x: -N2.x, y: -N2.y }, n2 / n1);
+
+      if (!out) {
+        const refd = reflect(refr, N2);
+        arrow(exit, { x: exit.x + refd.x * 160, y: exit.y + refd.y * 160 }, '#ef6c00');
+        msg2 = '<br>Tại I′: <b>phản xạ toàn phần</b> (không ló ra)';
+      } else {
+        arrow(exit, { x: exit.x + out.x * 180, y: exit.y + out.y * 180 }, '#6a1b9a');
+        const cosi2 = -dot(refr, { x: -N2.x, y: -N2.y });
+        const sini2 = Math.sqrt(Math.max(0, 1 - cosi2 * cosi2));
+        const sinOut = (n2 / n1) * sini2;
+        msg2 = `<br>Tại I′: i₂ = <b>${toDeg(Math.asin(clamp(sini2, -1, 1))).toFixed(1)}°</b>, `
+          + `r₂ = <b>${toDeg(Math.asin(clamp(sinOut, -1, 1))).toFixed(1)}°</b>`;
+      }
+    }
+  }
+
+  fillCircle(S, 7, '#e53935');
+  fillCircle(I, 5, '#000');
+  label('S', S, '#e53935', -18, -8);
+  label('I', I, '#000', -16, 16);
+
+  document.getElementById('result').innerHTML =
+    `S cố định. Góc tới chỉnh bằng thanh trượt.<br>${msg}${msg2}<br>n₁·sin i = n₂·sin r`;
+  document.getElementById('note').textContent =
+    'Đỏ: tia tới; xanh lá: trong cầu; tím: tia ló ra ngoài; cam: phản xạ toàn phần.';
+}
+
+render();
+</script>
+<script src="../canvas-hidpi.js"></script>
+</body>
+</html>

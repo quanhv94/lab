@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>Tán sắc ánh sáng qua lăng kính</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 16px; background: #f5f6fa; color: #222; }
+  h1 { font-size: 20px; margin: 0 0 12px; }
+  .wrap { display: flex; gap: 16px; flex-wrap: nowrap; align-items: flex-start; }
+  canvas { flex: 1 1 0; min-width: 0; width: 100%; height: auto; background: #fff; border: 1px solid #ccc; border-radius: 6px; cursor: grab; }
+  .panel { flex: 0 0 280px; width: 280px; box-sizing: border-box; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 12px 16px; }
+  .panel label { display: block; margin-top: 10px; font-weight: 600; }
+  .panel input[type=range] { width: 100%; }
+  .result { margin-top: 16px; line-height: 1.7; font-size: 14px; }
+  .result b { color: #6a1b9a; }
+  .legend div { display: flex; align-items: center; margin-top: 4px; }
+  .legend .swatch { flex: 0 0 28px; height: 0; margin-right: 8px; }
+  .spectrum { flex: 0 0 28px; height: 6px; margin-right: 8px; background: linear-gradient(to right, #e53935, #fb8c00, #fdd835, #43a047, #1e88e5, #3949ab, #8e24aa); }
+  .note { font-size: 13px; color: #555; margin-top: 12px; }
+  .back { display: inline-block; margin-bottom: 12px; padding: 8px 14px; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #6a1b9a; text-decoration: none; font-weight: 600; font-size: 14px; }
+  .back:hover { background: #f3e5f5; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Quay lại</a>
+<h1 id="title"></h1>
+<div class="wrap">
+  <canvas id="cv" width="1200" height="600"></canvas>
+  <div class="panel" id="prismPanel">
+
+    <label>Góc chiết quang A = <span id="prismApexVal"></span>°</label>
+    <input id="prismApexIn" type="range" min="20" max="80" step="0.5" value="60" />
+    <label>Chiết suất với ánh sáng đỏ n<sub>đỏ</sub> = <span id="dispersionRedIndexVal"></span></label>
+    <input id="dispersionRedIndexIn" type="range" min="1.3" max="1.8" step="0.01" value="1.5" />
+    <label>Chiết suất với ánh sáng tím n<sub>tím</sub> = <span id="dispersionVioletIndexVal"></span></label>
+    <input id="dispersionVioletIndexIn" type="range" min="1.3" max="1.9" step="0.01" value="1.58" />
+    <label>Góc tới i₁ = <span id="prismIncidenceVal"></span>°</label>
+    <input id="prismIncidenceIn" type="range" min="-90" max="90" step="0.5" value="45" />
+
+    <div class="result" id="prismResult"></div>
+
+    <div class="legend note">
+      <div><span class="swatch" style="border-top:5px solid #9e9e9e"></span>Tia sáng trắng tới SI</div>
+      <div><span class="spectrum"></span>Các tia đơn sắc từ đỏ đến tím</div>
+      <div><span class="swatch" style="border-top:2px dashed #555"></span>Pháp tuyến</div>
+    </div>
+    <p class="note">Có thể kéo tia tới (phía bên trái lăng kính) để thay đổi góc tới.</p>
+  </div>
+</div>
+<script>window.OPTICS_MODE = 'dispersion';</script>
+<script src="../optics.js"></script>
+</body>
+</html>

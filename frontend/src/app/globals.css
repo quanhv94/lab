@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-be-vietnam);
+  --font-mono: var(--font-geist-mono);
+
+  --color-qh-navy: #0b1f3a;
+  --color-qh-navy-deep: #071628;
+  --color-qh-blue: #1d6feb;
+  --color-qh-blue-bright: #3b82f6;
+  --color-qh-sky: #60a5fa;
+  --color-qh-surface: #eef3f9;
+  --color-qh-card: #ffffff;
+  --color-qh-text: #0f172a;
+  --color-qh-muted: #64748b;
+}
+
+body {
+  color: #0f172a;
+  background: #eef3f9;
+  font-family: var(--font-be-vietnam), sans-serif;
+}

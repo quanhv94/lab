@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>Thấu kính hội tụ</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 16px; background: #f5f6fa; color: #222; }
+  h1 { font-size: 20px; margin: 0 0 12px; }
+  .tabs { display: flex; gap: 4px; margin-bottom: -1px; }
+  .tab { padding: 10px 20px; border: 1px solid #ccc; border-bottom: none; border-radius: 6px 6px 0 0; background: #e4e6ef; cursor: pointer; font-size: 15px; font-weight: 600; color: #555; }
+  .tab.active { background: #fff; color: #6a1b9a; }
+  .wrap { display: flex; gap: 16px; flex-wrap: nowrap; align-items: flex-start; }
+  canvas { flex: 1 1 0; min-width: 0; width: 100%; height: auto; background: #fff; border: 1px solid #ccc; border-radius: 0 6px 6px 6px; cursor: grab; }
+  .panel { flex: 0 0 250px; width: 250px; box-sizing: border-box; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 12px 16px; }
+  .panel label { display: block; margin-top: 10px; font-weight: 600; }
+  .panel input[type=range] { width: 100%; }
+  .result { margin-top: 16px; line-height: 1.7; }
+  .result b { color: #6a1b9a; }
+  .legend div { display: flex; align-items: center; margin-top: 4px; }
+  .legend .swatch { flex: 0 0 28px; height: 0; margin-right: 8px; }
+  .note { font-size: 13px; color: #555; margin-top: 12px; }
+.back { display: inline-block; margin-bottom: 12px; padding: 8px 14px; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #6a1b9a; text-decoration: none; font-weight: 600; font-size: 14px; }
+  .back:hover { background: #f3e5f5; }
+  canvas { border-radius: 6px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Quay lại</a>
+<h1 id="title"></h1>
+<div class="wrap">
+  <canvas id="cv" width="1200" height="600"></canvas>
+  <div class="panel" id="lensPanel">
+
+    <label>Khoảng cách vật d = <span id="dVal"></span> cm</label>
+    <input id="dIn" type="range" min="1" max="55" step="0.5" value="30" />
+    <label>Tiêu cự f = <span id="fVal"></span> cm</label>
+    <input id="fIn" type="range" min="3" max="25" step="0.5" value="12" />
+    <label>Chiều cao vật h = <span id="hVal"></span> cm</label>
+    <input id="hIn" type="range" min="1" max="12" step="0.5" value="6" />
+
+    <div class="result" id="result"></div>
+
+    <div class="legend note">
+      <div><span class="swatch" style="border-top:3px solid #e53935"></span><span id="ray1Legend"></span></div>
+      <div><span class="swatch" style="border-top:3px solid #2e7d32"></span>Tia qua quang tâm O → truyền thẳng</div>
+      <div><span class="swatch" style="border-top:2px dashed #555"></span>Đường kéo dài / ảnh ảo</div>
+    </div>
+    <p class="note">Có thể kéo đỉnh vật B trên hình để thay đổi d và h.</p>
+  </div>
+</div>
+<script>window.OPTICS_MODE = 'converging';</script>
+<script src="../optics.js"></script>
+</body>
+</html>

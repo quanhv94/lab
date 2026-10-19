@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>Bài 4. Vùng tối và vùng nửa tối — nguồn sáng và tấm bìa</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 16px; background: #f5f6fa; color: #222; }
+h1 { font-size: 18px; margin: 0 0 12px; max-width: 1100px; line-height: 1.35; }
+.back { display: inline-block; margin-bottom: 12px; padding: 8px 14px; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #6a1b9a; text-decoration: none; font-weight: 600; font-size: 14px; }
+.back:hover { background: #f3e5f5; }
+.wrap { display: flex; gap: 16px; flex-wrap: nowrap; align-items: flex-start; width: 100%; }
+canvas { flex: 1 1 0; width: 100%; min-width: 0; background: #fff; border: 1px solid #ccc; border-radius: 6px; cursor: grab; }
+.panel { flex: 0 0 250px; width: 250px; box-sizing: border-box; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 12px 16px; }
+.panel label { display: block; margin-top: 10px; font-weight: 600; font-size: 14px; }
+.panel input[type=range], .panel input[type=number] { width: 100%; }
+.panel button { margin-top: 10px; padding: 8px 12px; cursor: pointer; }
+.result { margin-top: 14px; line-height: 1.7; font-size: 14px; }
+.result b { color: #6a1b9a; }
+.note { font-size: 13px; color: #555; margin-top: 12px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Quay lại</a>
+<h1>Bài 4. Vùng tối và vùng nửa tối — nguồn sáng và tấm bìa</h1>
+<div class="wrap">
+  <canvas id="cv" width="1000" height="560"></canvas>
+  <div class="panel">
+
+    <label>Độ rộng nguồn sáng: <span id="sVal"></span></label>
+    <input id="srcSize" type="range" min="8" max="120" step="1" value="60" />
+    <label>Chiều dài tấm bìa H = <span id="hVal"></span></label>
+    <input id="cardLen" type="range" min="60" max="320" step="1" value="160" />
+    <p class="note">Tấm bìa là một đoạn thẳng. Độ rộng 8–10 px: nguồn hẹp (điểm). Lớn hơn: nguồn rộng — bóng tối / nửa tối.</p>
+
+    <div class="result" id="result"></div>
+    <p class="note" id="note"></p>
+  </div>
+</div>
+<script>
+
+const canvas = document.getElementById('cv');
+const ctx = canvas.getContext('2d');
+const W = canvas.width;
+const H = canvas.height;
+function clear() { ctx.clearRect(0, 0, W, H); }
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+function mouse(e) {
+  const r = canvas.getBoundingClientRect();
+
+  return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height };
+}
+function line(a, b, { color = '#333', width = 2, dash = [] } = {}) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(b.x, b.y);
+  ctx.stroke();
+  ctx.restore();
+}
+function fillCircle(p, r, color) {
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+function label(t, p, color = '#222', ox = 8, oy = -8) {
+  ctx.fillStyle = color;
+  ctx.font = '14px system-ui';
+  ctx.fillText(t, p.x + ox, p.y + oy);
+}
+function arrow(a, b, color) {
+  line(a, b, { color, width: 2 });
+  const ang = Math.atan2(b.y - a.y, b.x - a.x);
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(b.x, b.y);
+  ctx.lineTo(b.x - 10 * Math.cos(ang - 0.4), b.y - 10 * Math.sin(ang - 0.4));
+  ctx.lineTo(b.x - 10 * Math.cos(ang + 0.4), b.y - 10 * Math.sin(ang + 0.4));
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+let drag = null;
+canvas.addEventListener('mousedown', (e) => { drag = hitTest(mouse(e)); });
+window.addEventListener('mouseup', () => { drag = null; });
+canvas.addEventListener('mousemove', (e) => {
+  if (!drag) {
+    return;
+  }
+
+  onDrag(drag, mouse(e));
+  render();
+});
+
+const ground = H - 40;
+const screenX = W - 80;
+const NARROW_MAX = 10;
+const midY = ground / 2;
+const state = {
+  card: { x: 420, y: midY - 80, len: 160 },
+  sourcesY: midY,
+  sourcesX: 140,
+  size: 60,
+};
+document.getElementById('srcSize').oninput = () => render();
+document.getElementById('cardLen').oninput = () => render();
+
+function isNarrowSource() {
+  return state.size <= NARROW_MAX;
+}
+
+function cardEnds() {
+  return {
+    top: { x: state.card.x, y: state.card.y },
+    bot: { x: state.card.x, y: state.card.y + state.card.len },
+  };
+}
+
+function getSource() {
+  const center = { x: state.sourcesX, y: state.sourcesY };
+  const half = isNarrowSource() ? 0 : state.size / 2;
+
+  return {
+    x: center.x,
+    y: center.y,
+    top: { x: center.x, y: center.y - half },
+    bot: { x: center.x, y: center.y + half },
+    narrow: half === 0,
+  };
+}
+
+function hitAtX(from, through, x) {
+  const t = (x - from.x) / (through.x - from.x || 1e-9);
+
+  return { x, y: from.y + t * (through.y - from.y) };
+}
+
+function distToSegment(p, a, b) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const len2 = dx * dx + dy * dy || 1;
+  const t = clamp(((p.x - a.x) * dx + (p.y - a.y) * dy) / len2, 0, 1);
+
+  return dist(p, { x: a.x + t * dx, y: a.y + t * dy });
+}
+
+/**
+ * Nguồn hẹp (điểm S): bóng tối = hình chiếu đoạn AB qua S lên màn.
+ *   h = H · L / d   với d = SAₓ, L = khoảng cách nguồn→màn, H = AB
+ * Nguồn rộng: tia cùng phía → bóng tối; tia chéo → nửa tối.
+ */
+function computeShadow(src, cardTop, cardBot) {
+  if (src.narrow) {
+    const S = { x: src.x, y: src.y };
+    const umbTop = hitAtX(S, cardTop, screenX).y;
+    const umbBot = hitAtX(S, cardBot, screenX).y;
+
+    return {
+      umbTop,
+      umbBot,
+      penTop: umbTop,
+      penBot: umbBot,
+      hasUmbra: umbTop < umbBot,
+      hasPenumbra: false,
+      rays: [
+        { from: S, via: cardTop, color: '#e53935' },
+        { from: S, via: cardBot, color: '#e53935' },
+      ],
+      umbraCardTop: cardTop,
+      umbraCardBot: cardBot,
+      penCardTop: cardTop,
+      penCardBot: cardBot,
+    };
+  }
+
+  const umbTop = hitAtX(src.top, cardTop, screenX).y;
+  const umbBot = hitAtX(src.bot, cardBot, screenX).y;
+  const penTop = hitAtX(src.bot, cardTop, screenX).y;
+  const penBot = hitAtX(src.top, cardBot, screenX).y;
+  const hasUmbra = umbTop < umbBot;
+
+  return {
+    umbTop: hasUmbra ? umbTop : null,
+    umbBot: hasUmbra ? umbBot : null,
+    penTop,
+    penBot,
+    hasUmbra,
+    hasPenumbra: true,
+    rays: [
+      { from: src.top, via: cardTop, color: '#e53935' },
+      { from: src.bot, via: cardBot, color: '#e53935' },
+      { from: src.bot, via: cardTop, color: '#ef6c00' },
+      { from: src.top, via: cardBot, color: '#ef6c00' },
+    ],
+    umbraCardTop: cardTop,
+    umbraCardBot: cardBot,
+    penCardTop: cardTop,
+    penCardBot: cardBot,
+  };
+}
+
+function hitTest(p) {
+  const ends = cardEnds();
+
+  if (distToSegment(p, ends.top, ends.bot) < 12) {
+    return 'card';
+  }
+
+  const half = isNarrowSource() ? 16 : state.size / 2 + 16;
+
+  if (Math.abs(p.x - state.sourcesX) < 30 && Math.abs(p.y - state.sourcesY) < half) {
+    return 'src';
+  }
+
+  return null;
+}
+
+function onDrag(which, p) {
+  if (which === 'card') {
+    state.card.x = clamp(p.x, 260, screenX - 60);
+    state.card.y = clamp(p.y - state.card.len / 2, 30, ground - state.card.len - 10);
+  }
+
+  if (which === 'src') {
+    state.sourcesX = clamp(p.x, 50, Math.min(280, state.card.x - 40));
+    state.sourcesY = clamp(p.y, 60, ground - 60);
+  }
+}
+
+function render() {
+  clear();
+  state.size = +document.getElementById('srcSize').value;
+  state.card.len = +document.getElementById('cardLen').value;
+  const narrow = isNarrowSource();
+  document.getElementById('sVal').textContent = state.size + ' px' + (narrow ? ' (nguồn hẹp)' : ' (nguồn rộng)');
+  document.getElementById('hVal').textContent = state.card.len + ' px';
+
+  const ends = cardEnds();
+  const cardTop = ends.top;
+  const cardBot = ends.bot;
+  const src = getSource();
+  const sh = computeShadow(src, cardTop, cardBot);
+
+  const d = state.card.x - src.x;
+  const L = screenX - src.x;
+  const D = screenX - state.card.x;
+  const objectH = state.card.len;
+  const sourceA = narrow ? 0 : state.size;
+  // Nguồn hẹp: h = H · L / d ; nguồn rộng: h_tối = H·L/d − a·D/d
+  const umbraHeightFormula = (objectH * L - sourceA * D) / d;
+  const penumbraSpanFormula = (objectH * L + sourceA * D) / d;
+
+  line({ x: screenX, y: 40 }, { x: screenX, y: ground }, { color: '#333', width: 2 });
+  label('Màn', { x: screenX - 28, y: 50 }, '#333', 0, 0);
+
+  if (sh.hasPenumbra) {
+    ctx.beginPath();
+    ctx.moveTo(cardTop.x, cardTop.y);
+    ctx.lineTo(screenX, sh.penTop);
+    ctx.lineTo(screenX, sh.penBot);
+    ctx.lineTo(cardBot.x, cardBot.y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(0,0,0,0.12)';
+    ctx.fill();
+  }
+
+  if (sh.hasUmbra) {
+    ctx.beginPath();
+    ctx.moveTo(cardTop.x, cardTop.y);
+    ctx.lineTo(screenX, sh.umbTop);
+    ctx.lineTo(screenX, sh.umbBot);
+    ctx.lineTo(cardBot.x, cardBot.y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(0,0,0,0.50)';
+    ctx.fill();
+  }
+
+  sh.rays.forEach(({ from, via, color }) => {
+    const hit = hitAtX(from, via, screenX);
+    arrow(from, via, color);
+    arrow(via, hit, color);
+  });
+
+  if (narrow) {
+    fillCircle({ x: src.x, y: src.y }, 7, '#ffeb3b');
+    ctx.strokeStyle = '#f9a825';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(src.x, src.y, 7, 0, Math.PI * 2);
+    ctx.stroke();
+    label('S (nguồn hẹp)', { x: src.x, y: src.y }, '#f57f17', -95, -12);
+  } else {
+    line(src.top, src.bot, { color: '#fbc02d', width: 10 });
+    fillCircle(src.top, 6, '#ffeb3b');
+    fillCircle(src.bot, 6, '#ffeb3b');
+    ctx.beginPath();
+    ctx.ellipse(src.x, src.y, 14, state.size / 2, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,235,59,0.55)';
+    ctx.fill();
+    ctx.strokeStyle = '#f9a825';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    label('Rìa trên', src.top, '#f57f17', -70, -4);
+    label('Rìa dưới', src.bot, '#f57f17', -70, 14);
+  }
+
+  // Tấm bìa = đoạn thẳng
+  line(cardTop, cardBot, { color: '#5d4037', width: 5 });
+  fillCircle(cardTop, 4, '#5d4037');
+  fillCircle(cardBot, 4, '#5d4037');
+  label('A', cardTop, '#5d4037', -18, -4);
+  label('B', cardBot, '#5d4037', -18, 14);
+  label('Tấm bìa', { x: cardTop.x, y: cardTop.y }, '#5d4037', 10, -8);
+
+  if (sh.hasUmbra) {
+    line({ x: screenX + 8, y: sh.umbTop }, { x: screenX + 8, y: sh.umbBot }, { color: '#000', width: 3 });
+    // mũi tên đo chiều cao
+    line({ x: screenX + 4, y: sh.umbTop }, { x: screenX + 12, y: sh.umbTop }, { color: '#000', width: 2 });
+    line({ x: screenX + 4, y: sh.umbBot }, { x: screenX + 12, y: sh.umbBot }, { color: '#000', width: 2 });
+    label('h', { x: screenX + 14, y: (sh.umbTop + sh.umbBot) / 2 }, '#000', 0, 4);
+  }
+
+  if (sh.hasPenumbra) {
+    label('Nửa tối', { x: screenX - 26, y: sh.penTop + 14 }, '#333', -62, 0);
+  }
+
+  const umbraH = sh.hasUmbra ? sh.umbBot - sh.umbTop : 0;
+  const penumbraOnly = sh.hasPenumbra ? Math.max(0, (sh.penBot - sh.penTop) - umbraH) : 0;
+
+  if (narrow) {
+    document.getElementById('result').innerHTML =
+      'Nguồn <b>hẹp</b> (điểm S): hai tia SA, SB tạo bóng tối duy nhất.<br>'
+      + `Chiều cao bóng tối trên màn: <b>h = ${umbraH.toFixed(1)}</b> px<br>`
+      + `<span style="color:#666">h = H · L / d = ${objectH} · ${L.toFixed(0)} / ${d.toFixed(0)} = ${umbraHeightFormula.toFixed(1)} px</span>`;
+    document.getElementById('note').textContent = 'd = khoảng cách S→tấm bìa; L = khoảng cách S→màn; H = chiều dài AB.';
+  } else {
+    const umbraText = sh.hasUmbra
+      ? `Chiều cao bóng tối: <b>h = ${umbraH.toFixed(1)}</b> px`
+      : 'Bóng tối: <b>không còn</b> trên màn';
+    document.getElementById('result').innerHTML =
+      `Nguồn <b>rộng</b> a = ${sourceA} px.<br>${umbraText}<br>`
+      + `Vùng nửa tối (hai phía): <b>${penumbraOnly.toFixed(1)}</b> px<br>`
+      + `<span style="color:#666">h<sub>tối</sub> = H·L/d − a·D/d ≈ ${Math.max(0, umbraHeightFormula).toFixed(1)} px<br>`
+      + `h<sub>tối+nửa tối</sub> = H·L/d + a·D/d ≈ ${penumbraSpanFormula.toFixed(1)} px</span>`;
+    document.getElementById('note').textContent =
+      'Nguồn càng rộng → bóng tối càng thấp, nửa tối càng rộng.';
+  }
+}
+
+render();
+</script>
+<script src="../canvas-hidpi.js"></script>
+</body>
+</html>

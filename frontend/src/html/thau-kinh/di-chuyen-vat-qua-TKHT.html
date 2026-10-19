@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>Bài 15. Di chuyển vật vuông góc trục chính</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 16px; background: #f5f6fa; color: #222; }
+h1 { font-size: 18px; margin: 0 0 12px; max-width: 1100px; line-height: 1.35; }
+.back { display: inline-block; margin-bottom: 12px; padding: 8px 14px; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #6a1b9a; text-decoration: none; font-weight: 600; font-size: 14px; }
+.back:hover { background: #f3e5f5; }
+.wrap { display: flex; gap: 16px; flex-wrap: nowrap; align-items: flex-start; width: 100%; }
+canvas { flex: 1 1 0; width: 100%; min-width: 0; background: #fff; border: 1px solid #ccc; border-radius: 6px; cursor: grab; }
+.panel { flex: 0 0 250px; width: 250px; box-sizing: border-box; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 12px 16px; }
+.panel label { display: block; margin-top: 10px; font-weight: 600; font-size: 14px; }
+.panel input[type=range] { width: 100%; }
+.result { margin-top: 14px; line-height: 1.7; font-size: 14px; }
+.result b { color: #6a1b9a; }
+.note { font-size: 13px; color: #555; margin-top: 12px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Quay lại</a>
+<h1>Bài 15. Di chuyển vật AB vuông góc trục chính (AB cố định)</h1>
+<div class="wrap">
+  <canvas id="cv" width="1000" height="560"></canvas>
+  <div class="panel">
+    <label>Tiêu cự f = <span id="fVal"></span> cm</label>
+    <input id="fIn" type="range" min="4" max="20" step="0.5" value="10" />
+    <p class="note">Đoạn <b>AB</b> cố định (|AB| = 8 cm), luôn vuông góc trục chính. Nhấn giữ A, B hoặc đoạn AB để di chuyển cả vật.</p>
+    <div class="result" id="result"></div>
+    <p class="note" id="note"></p>
+  </div>
+</div>
+<script>
+const canvas = document.getElementById('cv');
+const ctx = canvas.getContext('2d');
+const W = canvas.width;
+const H = canvas.height;
+const SCALE = 10;
+const OX = W / 2;
+const OY = H / 2;
+const AB_LEN = 8; // cm — cố định
+
+function clear() { ctx.clearRect(0, 0, W, H); }
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+function mouse(e) {
+  const r = canvas.getBoundingClientRect();
+
+  return { x: ((e.clientX - r.left) * W) / r.width, y: ((e.clientY - r.top) * H) / r.height };
+}
+function line(a, b, { color = '#333', width = 2, dash = [] } = {}) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(b.x, b.y);
+  ctx.stroke();
+  ctx.restore();
+}
+function fillCircle(p, r, color) {
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+function label(t, p, color = '#222', ox = 8, oy = -8) {
+  ctx.fillStyle = color;
+  ctx.font = '14px system-ui';
+  ctx.fillText(t, p.x + ox, p.y + oy);
+}
+function arrow(a, b, color) {
+  line(a, b, { color, width: 2 });
+  const ang = Math.atan2(b.y - a.y, b.x - a.x);
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(b.x, b.y);
+  ctx.lineTo(b.x - 10 * Math.cos(ang - 0.4), b.y - 10 * Math.sin(ang - 0.4));
+  ctx.lineTo(b.x - 10 * Math.cos(ang + 0.4), b.y - 10 * Math.sin(ang + 0.4));
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function toPx(p) { return { x: OX + p.x * SCALE, y: OY - p.y * SCALE }; }
+function toW(p) { return { x: (p.x - OX) / SCALE, y: (OY - p.y) / SCALE }; }
+
+// xObj < 0: khoảng cách vật; yA: tung độ điểm A (B = A + AB_LEN theo phương đứng)
+const state = { f: 10, xObj: -20, yA: 0 };
+
+function getAB() {
+  return {
+    A: { x: state.xObj, y: state.yA },
+    B: { x: state.xObj, y: state.yA + AB_LEN },
+  };
+}
+
+function imagePoint(p) {
+  const d = -p.x;
+  const h = p.y;
+  const f = state.f;
+
+  if (Math.abs(d - f) < 0.05) {
+    return null;
+  }
+
+  const dp = (d * f) / (d - f);
+
+  return { x: dp, y: (-h * dp) / d };
+}
+
+function distToSegment(p, a, b) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const len2 = dx * dx + dy * dy || 1;
+  let t = ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2;
+  t = clamp(t, 0, 1);
+
+  return dist(p, { x: a.x + t * dx, y: a.y + t * dy });
+}
+
+function hitTest(p) {
+  const { A, B } = getAB();
+  const Apx = toPx(A);
+  const Bpx = toPx(B);
+
+  if (dist(p, Apx) < 14 || dist(p, Bpx) < 14 || distToSegment(p, Apx, Bpx) < 10) {
+    return 'AB';
+  }
+
+  return null;
+}
+
+let drag = null;
+let dragOffset = { x: 0, y: 0 };
+
+canvas.addEventListener('mousedown', (e) => {
+  const p = mouse(e);
+  drag = hitTest(p);
+
+  if (drag === 'AB') {
+    const mid = toPx({ x: state.xObj, y: state.yA + AB_LEN / 2 });
+    dragOffset = { x: mid.x - p.x, y: mid.y - p.y };
+  }
+});
+window.addEventListener('mouseup', () => { drag = null; });
+canvas.addEventListener('mousemove', (e) => {
+  const p = mouse(e);
+
+  if (!drag) {
+    canvas.style.cursor = hitTest(p) ? 'grab' : 'default';
+
+    return;
+  }
+
+  // Di chuyển cả đoạn: giữ |AB| và phương vuông góc trục chính
+  const mid = toW({ x: p.x + dragOffset.x, y: p.y + dragOffset.y });
+  state.xObj = clamp(mid.x, -45, -2);
+  state.yA = clamp(mid.y - AB_LEN / 2, -14, 14 - AB_LEN);
+  render();
+});
+
+document.getElementById('fIn').oninput = () => render();
+
+function drawPrincipalRays(P, Pp, colPar, colCenter) {
+  const hitLens = { x: 0, y: P.y };
+  arrow(toPx(P), toPx(hitLens), colPar);
+
+  if (Pp) {
+    const endY = P.y + ((0 - P.y) / (state.f || 1e-9)) * 45;
+    arrow(toPx(hitLens), toPx({ x: 45, y: endY }), colPar);
+
+    if (Pp.x < 0) {
+      line(toPx(hitLens), toPx(Pp), { color: colPar, width: 1, dash: [5, 4] });
+    }
+  }
+
+  arrow(toPx(P), toPx({ x: 0, y: 0 }), colCenter);
+  const slope = (0 - P.y) / (0 - P.x || 1e-9);
+  arrow(toPx({ x: 0, y: 0 }), toPx({ x: 45, y: slope * 45 }), colCenter);
+
+  if (Pp && Pp.x < 0) {
+    line(toPx({ x: 0, y: 0 }), toPx(Pp), { color: colCenter, width: 1, dash: [5, 4] });
+  }
+}
+
+function render() {
+  clear();
+  state.f = +document.getElementById('fIn').value;
+  document.getElementById('fVal').textContent = state.f;
+
+  line(toPx({ x: -50, y: 0 }), toPx({ x: 50, y: 0 }), { color: '#333', width: 1 });
+  line(toPx({ x: 0, y: -18 }), toPx({ x: 0, y: 18 }), { color: '#000', width: 3 });
+  arrow(toPx({ x: 0, y: 16 }), toPx({ x: 0, y: 18 }), '#000');
+  arrow(toPx({ x: 0, y: -16 }), toPx({ x: 0, y: -18 }), '#000');
+  [[-state.f, 'F'], [state.f, "F'"], [-2 * state.f, '2F'], [2 * state.f, "2F'"]].forEach(([x, t]) => {
+    fillCircle(toPx({ x, y: 0 }), 3.5, '#000');
+    label(t, toPx({ x, y: 0 }), '#000', -8, 20);
+  });
+
+  const { A, B } = getAB();
+  const Ap = imagePoint(A);
+  const Bp = imagePoint(B);
+
+  // Đường gióng xuống trục chính
+  line(toPx(A), toPx({ x: A.x, y: 0 }), { color: '#999', width: 1, dash: [4, 4] });
+  line(toPx(B), toPx({ x: B.x, y: 0 }), { color: '#999', width: 1, dash: [4, 4] });
+
+  if (Ap && Bp) {
+    line(toPx(Ap), toPx({ x: Ap.x, y: 0 }), { color: '#999', width: 1, dash: [4, 4] });
+    line(toPx(Bp), toPx({ x: Bp.x, y: 0 }), { color: '#999', width: 1, dash: [4, 4] });
+  }
+
+  drawPrincipalRays(A, Ap, '#1565c0', '#00838f');
+  drawPrincipalRays(B, Bp, '#e53935', '#2e7d32');
+
+  line(toPx(A), toPx(B), { color: '#ef6c00', width: 3 });
+  fillCircle(toPx(A), 6, '#ef6c00');
+  fillCircle(toPx(B), 6, '#ef6c00');
+  label('A', toPx(A));
+  label('B', toPx(B));
+
+  if (Ap && Bp) {
+    line(toPx(Ap), toPx(Bp), { color: '#6a1b9a', width: 3, dash: (Ap.x < 0 || Bp.x < 0) ? [6, 4] : [] });
+    fillCircle(toPx(Ap), 5, '#6a1b9a');
+    fillCircle(toPx(Bp), 5, '#6a1b9a');
+    label("A'", toPx(Ap), '#6a1b9a');
+    label("B'", toPx(Bp), '#6a1b9a');
+  }
+
+  const d = -state.xObj;
+  const h = AB_LEN;
+  let html = `|AB| = <b>${AB_LEN}</b> cm (cố định), d = <b>${d.toFixed(1)}</b> cm<br>`;
+
+  if (Ap && Bp) {
+    const hp = Math.hypot(Bp.x - Ap.x, Bp.y - Ap.y);
+    const k = hp / h;
+    html += `|A′B′| = <b>${hp.toFixed(2)}</b> cm, k = <b>${k.toFixed(2)}</b><br>`;
+    html += `Ảnh ${Bp.y * B.y < 0 || Ap.y * A.y < 0 ? 'ngược chiều' : 'cùng chiều'} vật.`;
+    document.getElementById('note').textContent =
+      'Kéo AB lên/xuống (vuông góc trục) hoặc trái/phải (đổi d). Tia xanh: A; tia đỏ/lục: B.';
+  } else {
+    html += 'd ≈ f → ảnh ở vô cực.';
+    document.getElementById('note').textContent = '';
+  }
+
+  document.getElementById('result').innerHTML = html;
+}
+
+render();
+</script>
+<script src="../canvas-hidpi.js"></script>
+</body>
+</html>

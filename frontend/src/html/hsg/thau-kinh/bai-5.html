@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bài 5. — Thấu kính — thau-kinh</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 16px; background: #f5f6fa; color: #222; line-height: 1.55; }
+.back { display: inline-block; margin-bottom: 12px; padding: 8px 14px; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #1e4a7a; text-decoration: none; font-weight: 600; font-size: 14px; }
+.back:hover { background: #e8f1fb; }
+h1 { font-size: 20px; margin: 0 0 8px; color: #0b1f3a; }
+.meta { color: #555; font-size: 14px; margin-bottom: 16px; }
+.content { max-width: 860px; background: #fff; border: 1px solid #d7dce2; border-radius: 10px; padding: 20px 22px; }
+.content p { margin: 0 0 12px; }
+.content img { max-width: 100%; height: auto; display: block; margin: 12px 0; border-radius: 6px; border: 1px solid #e2e6ea; }
+.content table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 14px; }
+.content th, .content td { border: 1px solid #ccc; padding: 8px 10px; text-align: left; vertical-align: top; }
+
+.layout { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: start; }
+@media (min-width: 900px) {
+  .layout { grid-template-columns: 1fr 1fr; }
+}
+.sim-panel { display: flex; flex-direction: column; gap: 10px; }
+.sim-btn { padding: 10px 16px; border: none; border-radius: 8px; background: #1e4a7a; color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; align-self: flex-start; }
+.sim-btn:hover { background: #163a63; }
+.sim-wrap { display: none; border: 1px solid #ccc; border-radius: 10px; overflow: hidden; background: #fff; aspect-ratio: 16 / 9; }
+.sim-wrap.open { display: block; }
+.sim-wrap iframe { width: 100%; height: 100%; border: 0; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Quay lại Thấu kính</a>
+<h1>Bài 5.<span class="rating" title="5*" aria-label="5 trên 5 sao" style="display:inline-flex;align-items:center;gap:2px;margin-left:8px;vertical-align:middle"><span style="color:#fbbf24;display:inline-flex"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"/></svg></span><span style="color:#fbbf24;display:inline-flex"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"/></svg></span><span style="color:#fbbf24;display:inline-flex"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"/></svg></span><span style="color:#fbbf24;display:inline-flex"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"/></svg></span><span style="color:#fbbf24;display:inline-flex"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"/></svg></span></span></h1>
+<p class="meta">Chủ đề: Thấu kính · Bài tập HSG Quang học</p>
+<div class="layout">
+  <div class="content">
+<p>(Trích đề thi HSG thành phố Hà Nội năm 2026)</p>
+<p>Điểm sáng A đặt trước một thấu kính hội tụ (P) cho ảnh thật  cách A một đoạn L.</p>
+<p>Hình 1AA’h&#x27;hO(P)Hình 1AA’h&#x27;hO(P)1. Biết: L= 25cm, khoảng cách từ A tới trục chính của thấu kính  và khoảng cách từ  tới trục chính của thấu kính  (Hình 1).</p>
+<p>a) Tìm tiêu cự của thấu kính.</p>
+<p>b) Cố định điểm sáng A, cho (P) chuyển động thẳng đều với tốc độ 5 mm/s theo phương vuông góc với trục chính của nó. Nhận xét về chiều chuyển động của ảnh  và tìm tốc độ của  trong trường hợp này.</p>
+<p>2. Đưa điểm sáng A về trên trục chính của (P) và cách (P) một đoạn 16 cm. Cho (P) chuyển động thẳng đều lại gần A với tốc độ 2 cm/s, sao cho A luôn nằm trên trục chính của (P). Tìm tốc độ trung bình của  trong khoảng thời gian từ lúc (P) bắt đầu chuyển động cho đến khi  đạt tốc độ nhỏ nhất.</p>
+<p>(Học sinh được sử dụng công thức thấu kính: )</p>
+</div>
+  <div class="sim-panel">
+    <button type="button" class="sim-btn" id="simBtn">Mô phỏng</button>
+    <div class="sim-wrap" id="simWrap">
+      <iframe title="Mô phỏng thấu kính hội tụ" src="../../thau-kinh/thau-kinh-hoi-tu.html?embed=1" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var btn = document.getElementById('simBtn');
+  var wrap = document.getElementById('simWrap');
+  if (!btn || !wrap) return;
+  btn.addEventListener('click', function () {
+    var open = wrap.classList.toggle('open');
+    btn.textContent = open ? 'Ẩn mô phỏng' : 'Mô phỏng';
+  });
+})();
+</script>
+
+</body>
+</html>

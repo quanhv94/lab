@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>Bài 1. Di chuyển vật AB vào vùng nhìn thấy của gương</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 16px; background: #f5f6fa; color: #222; }
+h1 { font-size: 18px; margin: 0 0 12px; max-width: 1100px; line-height: 1.35; }
+.back { display: inline-block; margin-bottom: 12px; padding: 8px 14px; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #6a1b9a; text-decoration: none; font-weight: 600; font-size: 14px; }
+.back:hover { background: #f3e5f5; }
+.wrap { display: flex; gap: 16px; flex-wrap: nowrap; align-items: flex-start; width: 100%; }
+canvas { flex: 1 1 0; width: 100%; min-width: 0; background: #fff; border: 1px solid #ccc; border-radius: 6px; cursor: grab; }
+.panel { flex: 0 0 250px; width: 250px; box-sizing: border-box; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 12px 16px; }
+.panel label { display: block; margin-top: 10px; font-weight: 600; font-size: 14px; }
+.panel input[type=range], .panel input[type=number] { width: 100%; }
+.panel button { margin-top: 10px; padding: 8px 12px; cursor: pointer; }
+.result { margin-top: 14px; line-height: 1.7; font-size: 14px; }
+.result b { color: #6a1b9a; }
+.note { font-size: 13px; color: #555; margin-top: 12px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Quay lại</a>
+<h1>Bài 1. Di chuyển vật AB vào vùng nhìn thấy của gương</h1>
+<div class="wrap">
+  <canvas id="cv" width="1000" height="560"></canvas>
+  <div class="panel">
+
+    <label>Chiều dài gương: <span id="ml"></span></label>
+    <input id="mirrorLen" type="range" min="80" max="400" step="1" value="220" />
+    <p class="note">Gương là một đoạn thẳng. Kéo A/B đổi hình dạng; nhấn giữ AB để di chuyển cả vật; kéo gương đổi vị trí. Vùng nhìn thấy tô tím nhạt.</p>
+
+    <div class="result" id="result"></div>
+    <p class="note" id="note"></p>
+  </div>
+</div>
+<script>
+
+const canvas = document.getElementById('cv');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+function clear() { ctx.clearRect(0, 0, W, H); }
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+function mouse(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height };
+}
+function line(a, b, { color = '#333', width = 2, dash = [] } = {}) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.restore();
+}
+function fillCircle(p, r, color) {
+  ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+}
+function label(t, p, color = '#222', ox = 8, oy = -8) {
+  ctx.fillStyle = color; ctx.font = '14px system-ui'; ctx.fillText(t, p.x + ox, p.y + oy);
+}
+function arrow(a, b, color) {
+  line(a, b, { color, width: 2 });
+  const ang = Math.atan2(b.y - a.y, b.x - a.x);
+  ctx.save(); ctx.fillStyle = color; ctx.beginPath();
+  ctx.moveTo(b.x, b.y);
+  ctx.lineTo(b.x - 10 * Math.cos(ang - 0.4), b.y - 10 * Math.sin(ang - 0.4));
+  ctx.lineTo(b.x - 10 * Math.cos(ang + 0.4), b.y - 10 * Math.sin(ang + 0.4));
+  ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function reflect(dir, normal) {
+  const n = Math.hypot(normal.x, normal.y) || 1;
+  const nx = normal.x / n, ny = normal.y / n;
+  const d = 2 * (dir.x * nx + dir.y * ny);
+  return { x: dir.x - d * nx, y: dir.y - d * ny };
+}
+function normalize(v) {
+  const n = Math.hypot(v.x, v.y) || 1;
+  return { x: v.x / n, y: v.y / n };
+}
+function toDeg(r) { return r * 180 / Math.PI; }
+function toRad(d) { return d * Math.PI / 180; }
+let drag = null;
+let dragOffset = null;
+let abDelta = null;
+canvas.addEventListener('mousedown', (e) => {
+  const p = mouse(e);
+  drag = hitTest(p);
+
+  if (drag === 'AB') {
+    dragOffset = { x: p.x - state.A.x, y: p.y - state.A.y };
+    abDelta = { x: state.B.x - state.A.x, y: state.B.y - state.A.y };
+  }
+});
+window.addEventListener('mouseup', () => {
+  drag = null;
+  dragOffset = null;
+  abDelta = null;
+});
+canvas.addEventListener('mousemove', (e) => {
+  if (!drag) {
+    return;
+  }
+
+  onDrag(drag, mouse(e));
+  render();
+});
+
+
+const state = {
+  mirror: { x: 620, y: 140, len: 220 },
+  A: { x: 220, y: 380 },
+  B: { x: 220, y: 220 },
+};
+const mirrorLenIn = document.getElementById('mirrorLen');
+mirrorLenIn.oninput = () => render();
+function mirrorEnds() {
+  const m = state.mirror;
+
+  return { top: { x: m.x, y: m.y }, bot: { x: m.x, y: m.y + m.len } };
+}
+function imageOf(p) {
+  return { x: 2 * state.mirror.x - p.x, y: p.y };
+}
+function pointInVisible(p) {
+  const m = mirrorEnds();
+
+  if (p.x >= state.mirror.x) {
+    return false;
+  }
+
+  const img = imageOf(p);
+  const t1 = (state.mirror.x - p.x) / (img.x - p.x || 1e-9);
+  const yHit = p.y + t1 * (img.y - p.y);
+
+  return t1 > 0 && t1 < 1 && yHit >= m.top.y && yHit <= m.bot.y;
+}
+function distToSegment(p, a, b) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const len2 = dx * dx + dy * dy || 1;
+  const t = clamp(((p.x - a.x) * dx + (p.y - a.y) * dy) / len2, 0, 1);
+  const proj = { x: a.x + t * dx, y: a.y + t * dy };
+
+  return dist(p, proj);
+}
+function clampObjectPoint(p) {
+  return {
+    x: clamp(p.x, 40, state.mirror.x - 10),
+    y: clamp(p.y, 40, H - 40),
+  };
+}
+function hitTest(p) {
+  if (dist(p, state.A) < 12) {
+    return 'A';
+  }
+
+  if (dist(p, state.B) < 12) {
+    return 'B';
+  }
+
+  if (distToSegment(p, state.A, state.B) < 12) {
+    return 'AB';
+  }
+
+  const m = mirrorEnds();
+
+  if (Math.abs(p.x - state.mirror.x) < 10 && p.y >= m.top.y && p.y <= m.bot.y) {
+    return 'mirror';
+  }
+
+  return null;
+}
+function onDrag(which, p) {
+  if (which === 'A') {
+    state.A = clampObjectPoint(p);
+
+    return;
+  }
+
+  if (which === 'B') {
+    state.B = clampObjectPoint(p);
+
+    return;
+  }
+
+  if (which === 'AB' && dragOffset && abDelta) {
+    const nextA = clampObjectPoint({ x: p.x - dragOffset.x, y: p.y - dragOffset.y });
+    let nextB = { x: nextA.x + abDelta.x, y: nextA.y + abDelta.y };
+    const maxX = state.mirror.x - 10;
+    const shiftX = clamp(nextB.x, 40, maxX) - nextB.x;
+    const shiftY = clamp(nextB.y, 40, H - 40) - nextB.y;
+    nextB = { x: nextB.x + shiftX, y: nextB.y + shiftY };
+    state.A = { x: nextA.x + shiftX, y: nextA.y + shiftY };
+    state.B = nextB;
+
+    return;
+  }
+
+  if (which === 'mirror') {
+    state.mirror.x = clamp(p.x, 200, W - 40);
+    state.mirror.y = clamp(p.y - state.mirror.len / 2, 20, H - state.mirror.len - 20);
+  }
+}
+function render() {
+  clear();
+  state.mirror.len = +mirrorLenIn.value;
+  document.getElementById('ml').textContent = state.mirror.len + ' px';
+  const m = mirrorEnds();
+  ctx.beginPath();
+  ctx.moveTo(m.top.x, m.top.y);
+  ctx.lineTo(m.bot.x, m.bot.y);
+  ctx.lineTo(40, m.bot.y + 220);
+  ctx.lineTo(40, m.top.y - 220);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(106,27,154,0.12)';
+  ctx.fill();
+  line(m.top, m.bot, { color: '#1565c0', width: 4 });
+  label('Gương', m.top, '#1565c0', 8, 14);
+  line(state.A, state.B, { color: '#ef6c00', width: 3 });
+  fillCircle(state.A, 7, '#ef6c00');
+  fillCircle(state.B, 7, '#ef6c00');
+  label('A', state.A);
+  label('B', state.B);
+  const Ai = imageOf(state.A);
+  const Bi = imageOf(state.B);
+  line(Ai, Bi, { color: '#6a1b9a', width: 2, dash: [6, 5] });
+  fillCircle(Ai, 5, '#6a1b9a');
+  fillCircle(Bi, 5, '#6a1b9a');
+  label("A'", Ai, '#6a1b9a');
+  label("B'", Bi, '#6a1b9a');
+  line(state.A, Ai, { color: '#999', width: 1, dash: [4, 4] });
+  line(state.B, Bi, { color: '#999', width: 1, dash: [4, 4] });
+  const aOk = pointInVisible(state.A);
+  const bOk = pointInVisible(state.B);
+  document.getElementById('result').innerHTML =
+    `A ${aOk ? '<b>trong</b>' : 'ngoài'} vùng nhìn thấy<br>B ${bOk ? '<b>trong</b>' : 'ngoài'} vùng nhìn thấy<br>`
+    + (aOk && bOk ? '<b>Vật AB nhìn thấy ảnh qua gương</b>' : 'Đưa AB vào vùng tím để thấy ảnh');
+}
+
+render();
+</script>
+<script src="../canvas-hidpi.js"></script>
+</body>
+</html>

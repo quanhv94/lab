@@ -1,0 +1,161 @@
+{
+  "topics": [
+    {
+      "folder": "truyen-thang-anh-sang",
+      "title": "Truyền thẳng ánh sáng",
+      "count": 3,
+      "exercises": [
+        {
+          "num": 1,
+          "heading": "Bài 1. (3*)",
+          "file": "bai-1.html"
+        },
+        {
+          "num": 2,
+          "heading": "Bài 2. (4*)",
+          "file": "bai-2.html"
+        },
+        {
+          "num": 3,
+          "heading": "Bài 3. (5*)",
+          "file": "bai-3.html"
+        }
+      ]
+    },
+    {
+      "folder": "phan-xa-anh-sang",
+      "title": "Phản xạ ánh sáng",
+      "count": 6,
+      "exercises": [
+        {
+          "num": 1,
+          "heading": "Bài 1. (2*) (Trích đề thi HSG thành phố Hà Nội năm 2025)",
+          "file": "bai-1.html"
+        },
+        {
+          "num": 2,
+          "heading": "Bài 2. (2*) (Trích đề thi HSG thành phố Hà Nội 2026)",
+          "file": "bai-2.html"
+        },
+        {
+          "num": 3,
+          "heading": "Bài 3. (4*) (mô phỏng hệ 2 gương)",
+          "file": "bai-3.html"
+        },
+        {
+          "num": 4,
+          "heading": "Bài 4. (4*) (mô phỏng 3 gương)",
+          "file": "bai-4.html"
+        },
+        {
+          "num": 5,
+          "heading": "Bài 5. (4*) (Trích đề thi HSG tỉnh Nghệ An 2026)",
+          "file": "bai-5.html"
+        },
+        {
+          "num": 6,
+          "heading": "Bài 6. (5*) (Trích đề thi HSG thành phố Hà Nội 2026) (mô phỏng 2 điểm gương)",
+          "file": "bai-6.html"
+        }
+      ]
+    },
+    {
+      "folder": "khuc-xa-anh-sang",
+      "title": "Khúc xạ ánh sáng",
+      "count": 3,
+      "exercises": [
+        {
+          "num": 1,
+          "heading": "Bài 1. (2*) (Trích đề thi HSG thành phố Hà Nội 2025)",
+          "file": "bai-1.html"
+        },
+        {
+          "num": 2,
+          "heading": "Bài 2. (4*) (Trích đề thi HSG thành phố Hà Nội 2026) (mô phỏng khúc xạ mặt cầu)",
+          "file": "bai-2.html"
+        },
+        {
+          "num": 3,
+          "heading": "Bài 3 (4*). (Trích đề thi HSG thành phố Hà Nội 2025) (mô phỏng bình nước nghiêng)",
+          "file": "bai-3.html"
+        }
+      ]
+    },
+    {
+      "folder": "lang-kinh",
+      "title": "Lăng kính",
+      "count": 3,
+      "exercises": [
+        {
+          "num": 1,
+          "heading": "Bài 1. (3*) (Trích đề thi HSG thành phố Hà Nội năm 2025)",
+          "file": "bai-1.html"
+        },
+        {
+          "num": 2,
+          "heading": "Bài 2. (4*) (Trích đề thi HSG tỉnh Bắc Ninh 2026) (mô phỏng lăng kính thay đổi được)",
+          "file": "bai-2.html"
+        },
+        {
+          "num": 3,
+          "heading": "Bài 3. (4*) (Trích đề thi HSG tỉnh Hưng Yên 2026) (mô phỏng lăng kính thay đổi được)",
+          "file": "bai-3.html"
+        }
+      ]
+    },
+    {
+      "folder": "thau-kinh",
+      "title": "Thấu kính",
+      "count": 6,
+      "exercises": [
+        {
+          "num": 1,
+          "heading": "Bài 1. (3*) (Trích đề thi HSG tỉnh Phú Thọ 2026) (mô phỏng thấu kính hội tụ)",
+          "file": "bai-1.html"
+        },
+        {
+          "num": 2,
+          "heading": "Bài 2. (3*) (Trích đề thi HSG tỉnh Hưng Yên 2026)",
+          "file": "bai-2.html"
+        },
+        {
+          "num": 3,
+          "heading": "Bài 3. (4*) (Trích đề thi HSG thành phố Hà Nội 2025)",
+          "file": "bai-3.html"
+        },
+        {
+          "num": 4,
+          "heading": "Bài 4. (3*) (Trích đề thi HSG tỉnh Đắk Lắk 2026)",
+          "file": "bai-4.html"
+        },
+        {
+          "num": 5,
+          "heading": "Bài 5. (5*) (Trích đề thi HSG thành phố Hà Nội năm 2026) (mô phỏng thấu kính hội tụ)",
+          "file": "bai-5.html"
+        },
+        {
+          "num": 6,
+          "heading": "Bài 6. (4*) (Trích đề thi HSG tỉnh Hưng Yên 2026)",
+          "file": "bai-6.html"
+        }
+      ]
+    },
+    {
+      "folder": "he-thau-kinh",
+      "title": "Hệ thấu kính",
+      "count": 2,
+      "exercises": [
+        {
+          "num": 1,
+          "heading": "Bài 1. (5*) Trích đề HSG thành phố Đà Nẵng 2026",
+          "file": "bai-1.html"
+        },
+        {
+          "num": 2,
+          "heading": "Bài 2. (5*) Trích đề HSG thành phố Hải Phòng 2026 (mô phỏng hệ 2 thấu kính hội tụ)",
+          "file": "bai-2.html"
+        }
+      ]
+    }
+  ]
+}

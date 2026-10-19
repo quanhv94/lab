@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>Bài 6. Phản xạ nhiều lần giữa hai gương phẳng song song</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 16px; background: #f5f6fa; color: #222; }
+h1 { font-size: 18px; margin: 0 0 12px; max-width: 1100px; line-height: 1.35; }
+.back { display: inline-block; margin-bottom: 12px; padding: 8px 14px; background: #fff; border: 1px solid #ccc; border-radius: 6px; color: #6a1b9a; text-decoration: none; font-weight: 600; font-size: 14px; }
+.back:hover { background: #f3e5f5; }
+.wrap { display: flex; gap: 16px; flex-wrap: nowrap; align-items: flex-start; width: 100%; }
+canvas { flex: 1 1 0; width: 100%; min-width: 0; background: #fff; border: 1px solid #ccc; border-radius: 6px; cursor: grab; }
+.panel { flex: 0 0 250px; width: 250px; box-sizing: border-box; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 12px 16px; }
+.panel label { display: block; margin-top: 10px; font-weight: 600; font-size: 14px; }
+.panel input[type=range], .panel input[type=number] { width: 100%; }
+.panel button { margin-top: 10px; padding: 8px 12px; cursor: pointer; }
+.result { margin-top: 14px; line-height: 1.7; font-size: 14px; }
+.result b { color: #6a1b9a; }
+.note { font-size: 13px; color: #555; margin-top: 12px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Quay lại</a>
+<h1>Bài 6. Phản xạ nhiều lần giữa hai gương phẳng song song</h1>
+<div class="wrap">
+  <canvas id="cv" width="1000" height="560"></canvas>
+  <div class="panel">
+
+    <label>Khoảng cách hai gương: <span id="dVal"></span></label>
+    <input id="gap" type="range" min="80" max="280" step="1" value="160" />
+    <label>Góc tia tới: <span id="angVal"></span>°</label>
+    <input id="ang" type="range" min="5" max="70" step="0.5" value="35" />
+    <p class="note">Kéo điểm phát S giữa hai gương.</p>
+
+    <div class="result" id="result"></div>
+    <p class="note" id="note"></p>
+  </div>
+</div>
+<script>
+
+const canvas = document.getElementById('cv');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+function clear() { ctx.clearRect(0, 0, W, H); }
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+function mouse(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height };
+}
+function line(a, b, { color = '#333', width = 2, dash = [] } = {}) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.restore();
+}
+function fillCircle(p, r, color) {
+  ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+}
+function label(t, p, color = '#222', ox = 8, oy = -8) {
+  ctx.fillStyle = color; ctx.font = '14px system-ui'; ctx.fillText(t, p.x + ox, p.y + oy);
+}
+function arrow(a, b, color) {
+  line(a, b, { color, width: 2 });
+  const ang = Math.atan2(b.y - a.y, b.x - a.x);
+  ctx.save(); ctx.fillStyle = color; ctx.beginPath();
+  ctx.moveTo(b.x, b.y);
+  ctx.lineTo(b.x - 10 * Math.cos(ang - 0.4), b.y - 10 * Math.sin(ang - 0.4));
+  ctx.lineTo(b.x - 10 * Math.cos(ang + 0.4), b.y - 10 * Math.sin(ang + 0.4));
+  ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function reflect(dir, normal) {
+  const n = Math.hypot(normal.x, normal.y) || 1;
+  const nx = normal.x / n, ny = normal.y / n;
+  const d = 2 * (dir.x * nx + dir.y * ny);
+  return { x: dir.x - d * nx, y: dir.y - d * ny };
+}
+function normalize(v) {
+  const n = Math.hypot(v.x, v.y) || 1;
+  return { x: v.x / n, y: v.y / n };
+}
+function toDeg(r) { return r * 180 / Math.PI; }
+function toRad(d) { return d * Math.PI / 180; }
+let drag = null;
+canvas.addEventListener('mousedown', (e) => { drag = hitTest(mouse(e)); });
+window.addEventListener('mouseup', () => { drag = null; });
+canvas.addEventListener('mousemove', (e) => {
+  if (!drag) return;
+  onDrag(drag, mouse(e));
+  render();
+});
+
+
+const state = { gap: 160, ang: 35, S: { x: W / 2, y: H / 2 } };
+document.getElementById('gap').oninput = document.getElementById('ang').oninput = () => render();
+function hitTest(p) { return dist(p, state.S) < 14 ? 'S' : null; }
+function onDrag(which, p) {
+  if (which === 'S') {
+    const g = state.gap;
+    state.S = { x: clamp(p.x, W / 2 - g / 2 + 10, W / 2 + g / 2 - 10), y: clamp(p.y, 40, H - 40) };
+  }
+}
+function render() {
+  clear();
+  state.gap = +document.getElementById('gap').value;
+  state.ang = +document.getElementById('ang').value;
+  document.getElementById('dVal').textContent = state.gap + ' px';
+  document.getElementById('angVal').textContent = state.ang.toFixed(1);
+  const L = W / 2 - state.gap / 2, R = W / 2 + state.gap / 2;
+  line({ x: L, y: 30 }, { x: L, y: H - 30 }, { color: '#1565c0', width: 5 });
+  line({ x: R, y: 30 }, { x: R, y: H - 30 }, { color: '#1565c0', width: 5 });
+  label('G1', { x: L, y: 40 }, '#1565c0', -28, 0);
+  label('G2', { x: R, y: 40 }, '#1565c0', 8, 0);
+  let p = { ...state.S };
+  let dir = normalize({ x: Math.cos(toRad(state.ang)), y: Math.sin(toRad(state.ang)) });
+  let count = 0;
+  for (let i = 0; i < 40; i++) {
+    const wall = dir.x > 0 ? R : L;
+    const t = (wall - p.x) / (dir.x || 1e-9);
+    if (t <= 0) break;
+    const next = { x: p.x + dir.x * t, y: p.y + dir.y * t };
+    if (next.y < 30 || next.y > H - 30) {
+      const ty = next.y < 30 ? (30 - p.y) / dir.y : (H - 30 - p.y) / dir.y;
+      const end = { x: p.x + dir.x * ty, y: p.y + dir.y * ty };
+      arrow(p, end, '#e53935'); break;
+    }
+    arrow(p, next, i % 2 ? '#ef6c00' : '#e53935');
+    p = next; dir = { x: -dir.x, y: dir.y }; count++;
+  }
+  fillCircle(state.S, 7, '#2e7d32'); label('S', state.S, '#2e7d32');
+  document.getElementById('result').innerHTML = `Số lần phản xạ vẽ được: <b>${count}</b>`;
+}
+
+render();
+</script>
+<script src="../canvas-hidpi.js"></script>
+</body>
+</html>
