@@ -21,7 +21,7 @@ services:
       - key: JWT_REFRESH_EXPIRES_IN
         value: 7d
       - key: CORS_ORIGIN
-        value: https://lab-frontend.onrender.com
+        value: https://lab-frontend-i6va.onrender.com
   - type: web
     name: lab-frontend
     runtime: node
@@ -33,4 +33,4 @@ services:
       - key: NODE_ENV
         value: production
       - key: NEXT_PUBLIC_API_URL
-        value: https://lab-backend.onrender.com/api
+        value: https://lab-backend-hf90.onrender.com/api
