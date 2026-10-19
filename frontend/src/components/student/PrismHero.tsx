@@ -1,3 +1,6 @@
+import Image from "next/image";
+import prism from "@/assets/images/lang-kinh-tan-xa.png";
+
 export default function PrismHero() {
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1a5fd4] via-[#2b78ef] to-[#4aa3ff] px-6 py-8 text-white shadow-lg shadow-blue-500/20 sm:px-10 sm:py-10">
@@ -14,85 +17,16 @@ export default function PrismHero() {
           </p>
         </div>
 
-        <div className="mx-auto w-full max-w-sm lg:max-w-none">
-          <PrismIllustration />
+        <div className="mx-auto w-full max-w-md overflow-hidden rounded-2xl lg:max-w-none">
+          <Image
+            src={prism}
+            alt="Tia sáng trắng đi vào lăng kính và tán sắc thành dải màu"
+            className="h-auto w-full"
+            sizes="(max-width: 1024px) 100vw, 40vw"
+            priority
+          />
         </div>
       </div>
     </section>
-  );
-}
-
-function PrismIllustration() {
-  return (
-    <svg
-      viewBox="0 0 420 220"
-      className="h-auto w-full drop-shadow-xl"
-      aria-hidden
-    >
-      <defs>
-        <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#fff" stopOpacity="0" />
-          <stop offset="40%" stopColor="#fff" stopOpacity="0.95" />
-          <stop offset="100%" stopColor="#fff" stopOpacity="0.85" />
-        </linearGradient>
-        <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#dbeafe" stopOpacity="0.95" />
-          <stop offset="50%" stopColor="#93c5fd" stopOpacity="0.75" />
-          <stop offset="100%" stopColor="#60a5fa" stopOpacity="0.55" />
-        </linearGradient>
-        <linearGradient id="rainbow" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#ef4444" />
-          <stop offset="18%" stopColor="#f97316" />
-          <stop offset="36%" stopColor="#eab308" />
-          <stop offset="54%" stopColor="#22c55e" />
-          <stop offset="72%" stopColor="#3b82f6" />
-          <stop offset="88%" stopColor="#8b5cf6" />
-          <stop offset="100%" stopColor="#ec4899" />
-        </linearGradient>
-      </defs>
-
-      {/* incoming beam */}
-      <path
-        d="M20 78 H168"
-        stroke="url(#beam)"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-      <circle cx="24" cy="78" r="5" fill="#fff" opacity="0.9" />
-
-      {/* prism */}
-      <path
-        d="M168 48 L268 178 L168 158 Z"
-        fill="url(#glass)"
-        stroke="#e2e8f0"
-        strokeWidth="2"
-      />
-      <path
-        d="M168 48 L268 178"
-        stroke="#fff"
-        strokeOpacity="0.35"
-        strokeWidth="2"
-      />
-
-      {/* spectrum fan */}
-      {[
-        ["#ef4444", -8],
-        ["#f97316", 0],
-        ["#eab308", 8],
-        ["#22c55e", 16],
-        ["#3b82f6", 24],
-        ["#8b5cf6", 32],
-        ["#ec4899", 40],
-      ].map(([color, dy], i) => (
-        <path
-          key={color}
-          d={`M248 ${150 + Number(dy) * 0.15} L400 ${118 + Number(dy)}`}
-          stroke={color as string}
-          strokeWidth="5"
-          strokeLinecap="round"
-          opacity={0.85 - i * 0.04}
-        />
-      ))}
-    </svg>
   );
 }

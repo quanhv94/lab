@@ -88,7 +88,11 @@ body:has(.content) {
 .content p { font-size: 20px !important; line-height: 1.65 !important; }
 .content table { font-size: 18px !important; }
 body:has(.wrap) { background: #fff !important; padding: 16px 18px !important; }
-.wrap { align-items: stretch !important; }
+canvas[width][height] {
+  height: auto !important;
+  align-self: flex-start !important;
+  max-width: 100%;
+}
 canvas, .panel {
   background: transparent !important;
   border: 0 !important;
