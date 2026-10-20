@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Be_Vietnam_Pro, Geist_Mono } from "next/font/google";
+import ApiWakeGate from "@/components/ApiWakeGate";
 import { AuthProvider } from "@/lib/auth";
 import QueryProvider from "@/providers/QueryProvider";
 import "./globals.css";
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full font-sans">
         <QueryProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <ApiWakeGate>
+            <AuthProvider>{children}</AuthProvider>
+          </ApiWakeGate>
         </QueryProvider>
       </body>
     </html>
