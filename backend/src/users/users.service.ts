@@ -6,6 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcryptjs';
 import { FilterQuery, isValidObjectId, Model } from 'mongoose';
+import { ActivityLog } from '../activity/activity-log.schema';
 import { ADMIN_USERNAME } from '../auth/admin.constants';
 import { RefreshToken } from '../auth/refresh-token.schema';
 import { DEFAULT_USER_ROLE } from '../common/roles';
@@ -24,6 +25,8 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @InjectModel(RefreshToken.name)
     private readonly refreshTokenModel: Model<RefreshToken>,
+    @InjectModel(ActivityLog.name)
+    private readonly activityModel: Model<ActivityLog>,
   ) {}
 
   async create(dto: CreateUserDto): Promise<UserDocument> {
@@ -96,6 +99,7 @@ export class UsersService {
     await Promise.all([
       user.deleteOne(),
       this.refreshTokenModel.deleteMany({ userId: id }),
+      this.activityModel.deleteMany({ userId: id }),
     ]);
   }
 }
