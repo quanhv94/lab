@@ -15,6 +15,7 @@ import {
 } from "@/api";
 import { Alert, Button, Loading } from "@/components/ui";
 import { useRequireAuth } from "@/lib/auth";
+import ActivityModal from "./ActivityModal";
 import UserFormModal from "./UserFormModal";
 
 const LIMIT = 10;
@@ -27,6 +28,7 @@ export default function AdminUsersPage() {
   const [roleFilter, setRoleFilter] = useState<UserRole | "">("");
   const [page, setPage] = useState(1);
   const [editing, setEditing] = useState<User | null | undefined>(undefined);
+  const [historyUser, setHistoryUser] = useState<User | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -156,6 +158,9 @@ export default function AdminUsersPage() {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-2">
+                    <Button variant="secondary" className="px-3 py-1" onClick={() => setHistoryUser(u)}>
+                      Lịch sử
+                    </Button>
                     <Button variant="secondary" className="px-3 py-1" onClick={() => setEditing(u)}>
                       Sửa
                     </Button>
@@ -206,6 +211,10 @@ export default function AdminUsersPage() {
             </Button>
           </div>
         </div>
+      )}
+
+      {historyUser && (
+        <ActivityModal user={historyUser} onClose={() => setHistoryUser(null)} />
       )}
 
       {editing !== undefined && (

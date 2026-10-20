@@ -71,6 +71,13 @@ export interface CreateUserPayload {
   isActive?: boolean;
 }
 
+export interface ActivityEntry {
+  id: string;
+  path: string;
+  title: string;
+  visitedAt: string;
+}
+
 export interface UpdateUserPayload {
   password?: string;
   fullName?: string;

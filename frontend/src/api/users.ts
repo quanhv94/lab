@@ -5,6 +5,7 @@ import type {
   Paginated,
   UpdateUserPayload,
   User,
+  ActivityEntry,
 } from "./types";
 
 export function listUsers(params: ListUsersParams = {}) {
@@ -32,6 +33,17 @@ export function updateUser(id: string, payload: UpdateUserPayload) {
   return request<User>(`/admin/users/${id}`, {
     method: "PATCH",
     body: JSON.stringify(payload),
+  });
+}
+
+export function listUserActivity(id: string) {
+  return request<ActivityEntry[]>(`/admin/users/${id}/activity`);
+}
+
+export function recordActivity(path: string, title: string) {
+  return request<ActivityEntry>("/activity", {
+    method: "POST",
+    body: JSON.stringify({ path, title }),
   });
 }
 
