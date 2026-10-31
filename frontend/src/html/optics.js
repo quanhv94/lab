@@ -137,6 +137,7 @@ const state = {
   d: 30,
   focalLength: 12,
   h: 6,
+  lensX: 0,
   reflectionAngle: 40,
   n1: 1,
   n2: 1.33,
@@ -273,18 +274,19 @@ function drawAxisMarks(marks, labelOffsetY = 20) {
 }
 
 function drawAxisAndLens(f) {
+  const { lensX } = state;
   drawSegment(
     { x: X_MIN, y: 0 },
     { x: X_MAX, y: 0 },
     { color: COLORS.axis, width: 1 }
   );
-  drawLensSymbol({ isConverging: state.mode === "converging" });
-  drawLabel("O", { x: 0, y: 0 }, "#000", { x: 6, y: 18 });
+  drawLensSymbol({ x: lensX, isConverging: state.mode === "converging" });
+  drawLabel("O", { x: lensX, y: 0 }, "#000", { x: 6, y: 18 });
   drawAxisMarks([
-    { x: -f, label: "F" },
-    { x: f, label: "F'" },
-    { x: -2 * f, label: "2F" },
-    { x: 2 * f, label: "2F'" },
+    { x: lensX - f, label: "F" },
+    { x: lensX + f, label: "F'" },
+    { x: lensX - 2 * f, label: "2F" },
+    { x: lensX + 2 * f, label: "2F'" },
   ]);
 }
 
@@ -299,18 +301,26 @@ function computeImage({ d, f, h }) {
   return { dPrime, hPrime, magnification: -dPrime / d, isReal: dPrime > 0 };
 }
 
-function buildRays({ d, f, h }) {
-  const objectTop = { x: -d, y: h };
+function buildRays({ d, f, h, lensX = 0 }) {
+  const objectTop = { x: lensX - d, y: h };
   const rays = [
-    { color: COLORS.ray1, hit: { x: 0, y: h }, through: { x: f, y: 0 } },
-    { color: COLORS.ray2, hit: { x: 0, y: 0 }, through: { x: 1, y: -h / d } },
+    {
+      color: COLORS.ray1,
+      hit: { x: lensX, y: h },
+      through: { x: lensX + f, y: 0 },
+    },
+    {
+      color: COLORS.ray2,
+      hit: { x: lensX, y: 0 },
+      through: { x: lensX + 1, y: -h / d },
+    },
   ];
 
   return { objectTop, rays };
 }
 
-function drawRays({ d, f, h }, image) {
-  const { objectTop, rays } = buildRays({ d, f, h });
+function drawRays({ d, f, h, lensX = 0 }, image) {
+  const { objectTop, rays } = buildRays({ d, f, h, lensX });
 
   rays.forEach(({ color, hit, through }) => {
     drawSegment(objectTop, hit, { color });
@@ -324,7 +334,7 @@ function drawRays({ d, f, h }, image) {
       const backEnd = pointOnLineAtX(
         hit,
         through,
-        Math.min(image.dPrime, f) - EXTENSION_MARGIN
+        Math.min(lensX + image.dPrime, lensX + f) - EXTENSION_MARGIN
       );
       drawSegment(hit, backEnd, { color, width: 1.5, dashed: true });
     }
@@ -369,15 +379,15 @@ function renderLensTexts(f) {
 }
 
 function renderLens() {
-  const { d, h } = state;
+  const { d, h, lensX } = state;
   const f = getSignedFocal();
   renderLensTexts(f);
   drawAxisAndLens(f);
 
   const image = computeImage({ d, f, h });
-  drawRays({ d, f, h }, image);
+  drawRays({ d, f, h, lensX }, image);
   drawArrowObject({
-    x: -d,
+    x: lensX - d,
     height: h,
     color: COLORS.object,
     dashed: false,
@@ -386,7 +396,7 @@ function renderLens() {
 
   if (image) {
     drawArrowObject({
-      x: image.dPrime,
+      x: lensX + image.dPrime,
       height: image.hPrime,
       color: COLORS.image,
       dashed: !image.isReal,
@@ -1252,7 +1262,7 @@ function drawPrismEvents(events) {
 function drawPrismExit(exitEvent, isSimple) {
   const { to: exit, face, insideAngle, emergentAngle } = exitEvent;
   const end = pointAlong(exit, emergentAngle, PRISM_RAY_LENGTH);
-  const labels = isSimple ? ["r₂", "i₂"] : ["r'", "i'"];
+  const labels = isSimple ? ["i₂", "r₂"] : ["r'", "i'"];
   drawAngleArc({
     from: insideAngle + Math.PI,
     to: face.outward + Math.PI,
@@ -2027,6 +2037,7 @@ Object.entries(inputs).forEach(([key, input]) => {
 });
 
 let isDragging = false;
+let lensDragTarget = null;
 
 function getMouseWorld(event) {
   const rect = canvas.getBoundingClientRect();
@@ -2039,6 +2050,9 @@ function getMouseWorld(event) {
 
 const isNearObject = ({ p, objectX, height }) =>
   Math.abs(p.x - objectX) < 2 && p.y > -1 && p.y < height + 2;
+
+const isNearLens = (p) =>
+  Math.abs(p.x - state.lensX) < 2.5 && Math.abs(p.y) <= LENS_HALF_HEIGHT + 1;
 
 let mirrorDragTarget = "direction";
 
@@ -2057,7 +2071,21 @@ function canStartDrag(p) {
   }
 
   if (isLensMode()) {
-    return isNearObject({ p, objectX: -state.d, height: state.h });
+    if (isNearObject({ p, objectX: state.lensX - state.d, height: state.h })) {
+      lensDragTarget = "object";
+
+      return true;
+    }
+
+    if (isNearLens(p)) {
+      lensDragTarget = "lens";
+
+      return true;
+    }
+
+    lensDragTarget = null;
+
+    return false;
   }
 
   if (isSystemMode()) {
@@ -2089,6 +2117,15 @@ function dragObject({ p, distanceKey, heightKey, lensX }) {
   render();
 }
 
+function dragLens(p) {
+  const objectX = state.lensX - state.d;
+  const nextD = clampToInput(p.x - objectX, inputs.d);
+  state.d = nextD;
+  state.lensX = Math.round((objectX + nextD) * 2) / 2;
+  inputs.d.value = state.d;
+  render();
+}
+
 function dragIncidenceAngle(p) {
   const key = ANGLE_INPUT_KEYS[state.mode];
   const input = inputs[key];
@@ -2103,17 +2140,34 @@ function dragIncidenceAngle(p) {
 
 window.addEventListener("mouseup", () => {
   isDragging = false;
+  lensDragTarget = null;
 });
 
 canvas.addEventListener("mousemove", (event) => {
+  const p = getMouseWorld(event);
+
   if (!isDragging) {
+    if (isLensMode()) {
+      const overObject = isNearObject({
+        p,
+        objectX: state.lensX - state.d,
+        height: state.h,
+      });
+      canvas.style.cursor =
+        overObject || isNearLens(p) ? "grab" : "default";
+    }
+
     return;
   }
 
-  const p = getMouseWorld(event);
+  canvas.style.cursor = "grabbing";
 
   if (isLensMode()) {
-    dragObject({ p, distanceKey: "d", heightKey: "h", lensX: 0 });
+    if (lensDragTarget === "lens") {
+      dragLens(p);
+    } else {
+      dragObject({ p, distanceKey: "d", heightKey: "h", lensX: state.lensX });
+    }
 
     return;
   }
