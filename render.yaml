@@ -21,7 +21,7 @@ services:
       - key: JWT_REFRESH_EXPIRES_IN
         value: 7d
       - key: CORS_ORIGIN
-        value: https://lab-frontend-i6va.onrender.com
+        value: https://lab-frontend-i6va.onrender.com,https://lab.mark.io.vn
   - type: web
     name: lab-frontend
     runtime: node
