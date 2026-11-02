@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, type FormEvent } from "react";
-import { Alert, Button, Card, Field } from "@/components/ui";
-import { homePathFor, useAuth } from "@/lib/auth";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState, type FormEvent } from "react";
+import { Alert, Button, Card, Field, Loading } from "@/components/ui";
+import { loginPath, resolvePostAuthPath, useAuth } from "@/lib/auth";
 
-export default function RegisterPage() {
+function RegisterForm() {
   const { user, ready, register } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect_url");
   const [form, setForm] = useState({
     username: "",
     fullName: "",
@@ -19,8 +21,8 @@ export default function RegisterPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (ready && user) router.replace(homePathFor(user));
-  }, [ready, user, router]);
+    if (ready && user) router.replace(resolvePostAuthPath(user, redirectUrl));
+  }, [ready, user, router, redirectUrl]);
 
   const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -34,11 +36,12 @@ export default function RegisterPage() {
     }
     setSubmitting(true);
     try {
-      await register({
+      const registered = await register({
         username: form.username,
         password: form.password,
         fullName: form.fullName || undefined,
       });
+      router.replace(resolvePostAuthPath(registered, redirectUrl));
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -83,10 +86,21 @@ export default function RegisterPage() {
       </form>
       <p className="mt-4 text-center text-sm text-slate-600">
         Đã có tài khoản?{" "}
-        <Link href="/login" className="font-medium text-qh-blue underline">
+        <Link
+          href={loginPath(redirectUrl)}
+          className="font-medium text-qh-blue underline"
+        >
           Đăng nhập
         </Link>
       </p>
     </Card>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <RegisterForm />
+    </Suspense>
   );
 }

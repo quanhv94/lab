@@ -17,6 +17,47 @@ import {
   Role,
 } from "@/api";
 
+/** Only allow same-origin relative paths (blocks open redirects). */
+export function safeRedirectUrl(value: string | null | undefined): string | null {
+  if (!value) return null;
+  let decoded = value;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    return null;
+  }
+  if (!decoded.startsWith("/") || decoded.startsWith("//") || decoded.startsWith("/\\")) {
+    return null;
+  }
+  if (decoded.startsWith("/login") || decoded.startsWith("/register")) {
+    return null;
+  }
+  return decoded;
+}
+
+export function loginPath(redirectUrl?: string | null) {
+  const safe = safeRedirectUrl(redirectUrl);
+  if (!safe) return "/login";
+  return `/login?redirect_url=${encodeURIComponent(safe)}`;
+}
+
+export function resolvePostAuthPath(
+  user: AuthUser,
+  redirectUrl?: string | null,
+) {
+  const safe = safeRedirectUrl(redirectUrl);
+  if (safe) {
+    if (user.role === Role.Admin && !safe.startsWith("/admin")) {
+      return homePathFor(user);
+    }
+    if (user.role !== Role.Admin && safe.startsWith("/admin")) {
+      return homePathFor(user);
+    }
+    return safe;
+  }
+  return homePathFor(user);
+}
+
 interface AuthContextValue {
   user: AuthUser | null;
   ready: boolean;
@@ -101,8 +142,12 @@ export function useRequireAuth(role?: Role) {
 
   useEffect(() => {
     if (!auth.ready) return;
-    if (!auth.user) router.replace("/login");
-    else if (role && auth.user.role !== role) router.replace("/");
+    if (!auth.user) {
+      const current = `${window.location.pathname}${window.location.search}`;
+      router.replace(loginPath(current));
+      return;
+    }
+    if (role && auth.user.role !== role) router.replace("/");
   }, [auth.ready, auth.user, role, router]);
 
   return { ...auth, allowed };
