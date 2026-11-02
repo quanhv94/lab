@@ -1,4 +1,5 @@
 import { getExperiment } from "@/data/experiments";
+import { getPracticeExam } from "@/data/de-on";
 import { getHsgExercise, getHsgTopic } from "@/data/hsg";
 import { parseStarRating } from "@/components/student/StarRating";
 
@@ -19,6 +20,11 @@ export function screenTitle(pathname: string) {
     const found = getHsgExercise(folder, file);
     if (!found) return topic.title;
     return `${topic.title} — ${parseStarRating(found.exercise.heading).label}`;
+  }
+  if (pathname === "/practice") return "Đề luyện";
+  if (pathname.startsWith("/practice/")) {
+    const num = Number.parseInt(pathname.split("/")[2] ?? "", 10);
+    return getPracticeExam(num)?.title ?? "Đề luyện";
   }
   if (pathname === "/results") return "Kết quả";
   if (pathname === "/settings") return "Cài đặt";

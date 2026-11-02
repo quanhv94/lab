@@ -1,0 +1,47 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import HsgExerciseView from "@/components/student/HsgExerciseView";
+import {
+  PRACTICE_EXAMS,
+  getPracticeExam,
+  practiceHtmlPath,
+} from "@/data/de-on";
+
+export function generateStaticParams() {
+  return PRACTICE_EXAMS.map((e) => ({ num: String(e.num) }));
+}
+
+export default async function PracticeExamPage({
+  params,
+}: {
+  params: Promise<{ num: string }>;
+}) {
+  const { num: raw } = await params;
+  const num = Number.parseInt(raw, 10);
+  if (!Number.isFinite(num)) notFound();
+
+  const exam = getPracticeExam(num);
+  if (!exam) notFound();
+
+  const src = `${practiceHtmlPath(exam.file)}?embed=1`;
+  const focus = exam.focus.replace(/^Chủ đề trọng tâm:\s*/i, "");
+
+  return (
+    <div className="flex h-full min-h-0 w-full flex-col gap-4">
+      <div className="shrink-0">
+        <Link
+          href="/practice"
+          className="text-sm font-medium text-[#1d6feb] hover:underline"
+        >
+          ← Quay lại Đề luyện
+        </Link>
+        <h1 className="mt-2 text-xl font-bold text-slate-900">{exam.title}</h1>
+        <p className="mt-1 text-sm text-[#64748b]">
+          {[exam.duration, focus].filter(Boolean).join(" · ")}
+        </p>
+      </div>
+
+      <HsgExerciseView exerciseSrc={src} exerciseTitle={exam.title} />
+    </div>
+  );
+}

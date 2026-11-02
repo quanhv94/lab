@@ -39,11 +39,6 @@ if [[ ! -d "$FRONTEND/node_modules" ]]; then
   (cd "$FRONTEND" && npm install)
 fi
 
-if command -v docker >/dev/null 2>&1 && [[ -f "$ROOT/docker-compose.yml" ]]; then
-  echo "→ MongoDB (docker compose)..."
-  (cd "$ROOT" && docker compose up -d)
-fi
-
 echo "→ Backend  http://localhost:4000  ($BACKEND)"
 (cd "$BACKEND" && npm run start:dev) &
 PIDS+=($!)

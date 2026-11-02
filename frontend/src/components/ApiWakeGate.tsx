@@ -55,19 +55,23 @@ export default function ApiWakeGate({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  if (!ready) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#0b1f3a] via-[#12325a] to-[#1d6feb] px-6 text-white">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-white/25 border-t-white" />
-        <p className="mt-6 text-lg font-semibold tracking-wide">QUANG HỌC ẢO</p>
-        <p className="mt-2 text-sm text-blue-50/90">
-          {slow
-            ? "Máy chủ đang khởi động, vui lòng đợi thêm một chút..."
-            : "Đang kết nối máy chủ..."}
-        </p>
+  return (
+    <>
+      {!ready ? (
+        <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#0b1f3a] via-[#12325a] to-[#1d6feb] px-6 text-white">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-white/25 border-t-white" />
+          <p className="mt-6 text-lg font-semibold tracking-wide">QUANG HỌC ẢO</p>
+          <p className="mt-2 text-sm text-blue-50/90">
+            {slow
+              ? "Máy chủ đang khởi động, vui lòng đợi thêm một chút..."
+              : "Đang kết nối máy chủ..."}
+          </p>
+        </div>
+      ) : null}
+      {/* Keep route segments mounted so instant-navigation validation can run. */}
+      <div className={ready ? undefined : "hidden"} aria-hidden={!ready || undefined}>
+        {children}
       </div>
-    );
-  }
-
-  return children;
+    </>
+  );
 }
