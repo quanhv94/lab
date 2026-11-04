@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type Ref,
+  type RefObject,
+} from "react";
 
 /** Fixed 16:9 embed frame with optional fullscreen control. */
 export default function AutoHeightIframe({
@@ -8,12 +15,16 @@ export default function AutoHeightIframe({
   title,
   showFullscreen = true,
   fill = false,
+  iframeRef,
+  onLoad,
 }: {
   src: string;
   title: string;
   showFullscreen?: boolean;
   /** Stretch to the parent panel instead of a nested 16:9 frame. */
   fill?: boolean;
+  iframeRef?: RefObject<HTMLIFrameElement | null> | Ref<HTMLIFrameElement>;
+  onLoad?: () => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -49,10 +60,12 @@ export default function AutoHeightIframe({
       }`}
     >
       <iframe
+        ref={iframeRef}
         src={src}
         title={title}
         className="absolute inset-0 h-full w-full border-0"
         allowFullScreen={showFullscreen}
+        onLoad={onLoad}
       />
       {showFullscreen && (
         <button

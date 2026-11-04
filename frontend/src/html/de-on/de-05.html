@@ -21,17 +21,23 @@ h1 { font-size: 20px; margin: 0 0 8px; color: #0b1f3a; }
 .content table.exam-header p { margin: 0 0 4px; }
 .content table.exam-header p:last-child { margin-bottom: 0; }
 
-.options { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 16px; }
+.options {
+  display: flex; flex-direction: column; gap: 8px; margin: 8px 0 16px;
+  padding: 10px; border: 1px solid transparent; border-radius: 12px;
+}
 .option {
-  display: flex; align-items: flex-start; gap: 10px;
+  display: flex; align-items: center; gap: 10px;
   padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px;
   cursor: pointer; background: #fff; transition: border-color .15s, background .15s;
 }
 .option:hover { border-color: #93c5fd; background: #f8fbff; }
 .option:has(input:checked) { border-color: #3b82f6; background: #eff6ff; }
-.option input { margin-top: 4px; accent-color: #2563eb; flex-shrink: 0; }
-.opt-key { font-weight: 700; color: #0b1f3a; min-width: 1.4em; }
-.opt-text { flex: 1; }
+.option.is-key, .tf-choice.is-key, .essay-radio.is-key {
+  border-color: #16a34a !important; background: #f0fdf4 !important; color: #15803d;
+}
+.option input { margin: 0; accent-color: #2563eb; flex-shrink: 0; }
+.opt-key { font-weight: 700; color: #0b1f3a; min-width: 1.4em; line-height: 1.4; }
+.opt-text { flex: 1; line-height: 1.4; }
 .tf-item {
   display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px;
   margin: 8px 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px;
@@ -47,13 +53,62 @@ h1 { font-size: 20px; margin: 0 0 8px; color: #0b1f3a; }
 .tf-choice:hover { border-color: #93c5fd; background: #f0f7ff; }
 .tf-choice:has(input:checked) { border-color: #3b82f6; background: #eff6ff; color: #1e40af; }
 .tf-choice input { accent-color: #2563eb; }
+.short-wrap { margin: 8px 0 16px; }
+.short-label { font-weight: 600; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.short-input, .fill-input {
+  min-width: 7rem; max-width: 14rem; padding: 6px 10px;
+  border: 1px solid #cbd5e1; border-radius: 8px; font: inherit;
+}
+.fill-input { min-width: 4.5rem; margin: 0 4px; }
+.answer-panel {
+  margin: 12px 0 22px; padding: 14px 16px; border: 1px dashed #94a3b8;
+  border-radius: 12px; background: #f8fafc;
+}
+.answer-panel-title { margin: 0 0 10px; font-weight: 700; color: #0b1f3a; }
+.essay-row { margin: 0 0 10px; line-height: 1.7; }
+.essay-textarea {
+  width: 100%; box-sizing: border-box; padding: 10px 12px;
+  border: 1px solid #cbd5e1; border-radius: 10px; font: inherit; resize: vertical;
+}
+.essay-radios { display: inline-flex; flex-wrap: wrap; gap: 6px; vertical-align: middle; margin: 0 4px; }
+.essay-radio {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border: 1px solid #cbd5e1; border-radius: 999px;
+  background: #fff; cursor: pointer; font-weight: 600; font-size: 14px;
+}
+.essay-radio:has(input:checked) { border-color: #3b82f6; background: #eff6ff; }
+.inline-field { display: inline; }
+.grade-item.is-correct, .grade-item.is-correct.option, .tf-item.is-correct, .short-wrap.is-correct, .inline-field.is-correct {
+  border-color: #16a34a !important; background: #f0fdf4 !important;
+}
+.grade-item.is-wrong, .grade-item.is-wrong.option, .tf-item.is-wrong, .short-wrap.is-wrong, .inline-field.is-wrong {
+  border-color: #dc2626 !important; background: #fef2f2 !important;
+}
+.inline-field.is-correct .fill-input,
+.inline-field.is-wrong .fill-input { border-color: inherit; }
+.grade-feedback { display: inline-block; margin-left: 8px; font-size: 13px; font-weight: 600; }
+.is-correct > .grade-feedback, .is-correct .grade-feedback { color: #15803d; }
+.is-wrong > .grade-feedback, .is-wrong .grade-feedback { color: #b91c1c; }
+.correct-ans { color: #15803d; }
+.submit-bar {
+  position: sticky; bottom: 0; margin-top: 20px; padding: 14px 0 4px;
+  background: linear-gradient(to top, #fff 70%, transparent); display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+}
+#submit-btn {
+  appearance: none; border: 0; border-radius: 10px; padding: 12px 18px;
+  background: #1e4a7a; color: #fff; font-weight: 700; font-size: 15px; cursor: pointer;
+}
+#submit-btn:hover { background: #163a63; }
+#submit-btn:disabled { opacity: .7; cursor: default; }
+#score-box { font-size: 16px; color: #0b1f3a; }
+.score-note { color: #64748b; font-size: 13px; font-weight: 500; margin-left: 6px; }
 
 </style>
 </head>
-<body>
+<body data-exam-num="5" data-exam-title="Đề số 5">
 <a class="back" href="/practice">← Quay lại Đề luyện</a>
 <h1>Đề số 5</h1>
-<p class="meta">Đề ôn luyện HSG KHTN 9 · chọn đáp án trực tiếp trên đề</p>
+<p class="meta">Chấm tự động phần trắc nghiệm; tự luận dùng ô viết bài (không chấm tự động)</p>
 <div class="content">
 <table class="exam-header"><tr><td><p><strong>ĐỘI TUYỂN HSG KHTN 9</strong></p><p><strong>ĐỀ ÔN LUYỆN SỐ 05</strong></p><p><em>(Đề gồm Phần A và Phần B)</em></p></td><td><p><strong>ĐỀ ÔN THI CHỌN HỌC SINH GIỎI LỚP 9</strong></p><p>Môn: <strong>KHOA HỌC TỰ NHIÊN</strong></p><p><strong>(Mạch nội dung: Năng lượng và sự biến đổi)</strong></p><p>Thời gian làm bài: <em>150 phút</em></p><p><em>Chủ đề trọng tâm: Trái Đất – Bầu trời – Khối lượng riêng hợp kim – Nhiệt lượng kế – Khúc xạ – Vôn kế thực</em></p></td></tr></table>
 <p><em>- Thí sinh làm bài trực tiếp vào đề thi (hoặc giấy thi). - Không sử dụng tài liệu. - Được dùng máy tính cầm tay.</em></p>
@@ -61,41 +116,45 @@ h1 { font-size: 20px; margin: 0 0 8px; color: #0b1f3a; }
 <p class="section"><strong>I. Câu trắc nghiệm nhiều phương án lựa chọn</strong> <em>(2,0 điểm)</em></p>
 <p><em>Thí sinh trả lời từ Câu 1 đến Câu 8. Mỗi câu hỏi thí sinh chỉ chọn một phương án đúng.</em></p>
 <p class="question"><strong>Câu 1.</strong> Hiện tượng ngày và đêm trên Trái Đất là do</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-1-A"><input type="radio" name="mcq-1" id="mcq-1-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">Trái Đất tự quay quanh trục của nó.</span></label><label class="option" for="mcq-1-B"><input type="radio" name="mcq-1" id="mcq-1-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">Mặt Trời quay quanh Trái Đất.</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-1" data-answer="A" data-points="0.25" role="radiogroup"><label class="option" for="mcq-1-A"><input type="radio" name="mcq-1" id="mcq-1-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">Trái Đất tự quay quanh trục của nó.</span></label><label class="option" for="mcq-1-B"><input type="radio" name="mcq-1" id="mcq-1-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">Mặt Trời quay quanh Trái Đất.</span></label></div>
 <p><strong>C.</strong> Mặt Trăng che khuất Mặt Trời.	<strong>D.</strong> Trái Đất quay quanh Mặt Trời.</p>
 <p class="question"><strong>Câu 2.</strong> Ta quan sát thấy Mặt Trăng có hình dạng thay đổi (các pha) theo ngày trong tháng âm lịch là do</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-2-A"><input type="radio" name="mcq-2" id="mcq-2-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">Mặt Trăng tự phát sáng không đều.</span></label><label class="option" for="mcq-2-B"><input type="radio" name="mcq-2" id="mcq-2-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">mây che khuất Mặt Trăng.</span></label><label class="option" for="mcq-2-C"><input type="radio" name="mcq-2" id="mcq-2-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">vị trí tương đối giữa Mặt Trời, Trái Đất và Mặt Trăng thay đổi.</span></label><label class="option" for="mcq-2-D"><input type="radio" name="mcq-2" id="mcq-2-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">bóng Trái Đất che Mặt Trăng.</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-2" data-answer="C" data-points="0.25" role="radiogroup"><label class="option" for="mcq-2-A"><input type="radio" name="mcq-2" id="mcq-2-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">Mặt Trăng tự phát sáng không đều.</span></label><label class="option" for="mcq-2-B"><input type="radio" name="mcq-2" id="mcq-2-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">mây che khuất Mặt Trăng.</span></label><label class="option" for="mcq-2-C"><input type="radio" name="mcq-2" id="mcq-2-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">vị trí tương đối giữa Mặt Trời, Trái Đất và Mặt Trăng thay đổi.</span></label><label class="option" for="mcq-2-D"><input type="radio" name="mcq-2" id="mcq-2-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">bóng Trái Đất che Mặt Trăng.</span></label></div>
 <p class="question"><strong>Câu 3.</strong> Nguyệt thực xảy ra khi</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-3-A"><input type="radio" name="mcq-3" id="mcq-3-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">Mặt Trăng nằm giữa Mặt Trời và Trái Đất.</span></label><label class="option" for="mcq-3-B"><input type="radio" name="mcq-3" id="mcq-3-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">Trái Đất nằm giữa Mặt Trời và Mặt Trăng.</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-3" data-answer="B" data-points="0.25" role="radiogroup"><label class="option" for="mcq-3-A"><input type="radio" name="mcq-3" id="mcq-3-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">Mặt Trăng nằm giữa Mặt Trời và Trái Đất.</span></label><label class="option" for="mcq-3-B"><input type="radio" name="mcq-3" id="mcq-3-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">Trái Đất nằm giữa Mặt Trời và Mặt Trăng.</span></label></div>
 <p><strong>C.</strong> Mặt Trời nằm giữa Trái Đất và Mặt Trăng.	<strong>D.</strong> Mặt Trăng ở xa Trái Đất nhất.</p>
 <p class="question"><strong>Câu 4.</strong> Mùa hè ở Bắc bán cầu nóng hơn mùa đông chủ yếu là vì</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-4-A"><input type="radio" name="mcq-4" id="mcq-4-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">Trái Đất ở gần Mặt Trời hơn.</span></label><label class="option" for="mcq-4-B"><input type="radio" name="mcq-4" id="mcq-4-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">Mặt Trời phát ra nhiều năng lượng hơn.</span></label><label class="option" for="mcq-4-C"><input type="radio" name="mcq-4" id="mcq-4-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">Trái Đất quay nhanh hơn.</span></label><label class="option" for="mcq-4-D"><input type="radio" name="mcq-4" id="mcq-4-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">trục Trái Đất nghiêng nên tia nắng chiếu gần vuông góc hơn và ngày dài hơn.</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-4" data-answer="D" data-points="0.25" role="radiogroup"><label class="option" for="mcq-4-A"><input type="radio" name="mcq-4" id="mcq-4-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">Trái Đất ở gần Mặt Trời hơn.</span></label><label class="option" for="mcq-4-B"><input type="radio" name="mcq-4" id="mcq-4-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">Mặt Trời phát ra nhiều năng lượng hơn.</span></label><label class="option" for="mcq-4-C"><input type="radio" name="mcq-4" id="mcq-4-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">Trái Đất quay nhanh hơn.</span></label><label class="option" for="mcq-4-D"><input type="radio" name="mcq-4" id="mcq-4-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">trục Trái Đất nghiêng nên tia nắng chiếu gần vuông góc hơn và ngày dài hơn.</span></label></div>
 <p class="question"><strong>Câu 5.</strong> Trộn 1 lít nước (1000 kg/m³) với 1 lít cồn (800 kg/m³). Bỏ qua sự thay đổi thể tích khi trộn, khối lượng riêng của hỗn hợp là</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-5-A"><input type="radio" name="mcq-5" id="mcq-5-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">1800 kg/m³</span></label><label class="option" for="mcq-5-B"><input type="radio" name="mcq-5" id="mcq-5-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">900 kg/m³</span></label><label class="option" for="mcq-5-C"><input type="radio" name="mcq-5" id="mcq-5-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">850 kg/m³</span></label><label class="option" for="mcq-5-D"><input type="radio" name="mcq-5" id="mcq-5-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">950 kg/m³</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-5" data-answer="B" data-points="0.25" role="radiogroup"><label class="option" for="mcq-5-A"><input type="radio" name="mcq-5" id="mcq-5-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">1800 kg/m³</span></label><label class="option" for="mcq-5-B"><input type="radio" name="mcq-5" id="mcq-5-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">900 kg/m³</span></label><label class="option" for="mcq-5-C"><input type="radio" name="mcq-5" id="mcq-5-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">850 kg/m³</span></label><label class="option" for="mcq-5-D"><input type="radio" name="mcq-5" id="mcq-5-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">950 kg/m³</span></label></div>
 <p class="question"><strong>Câu 6.</strong> Nhiệt từ Mặt Trời truyền đến Trái Đất bằng hình thức</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-6-A"><input type="radio" name="mcq-6" id="mcq-6-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">bức xạ nhiệt</span></label><label class="option" for="mcq-6-B"><input type="radio" name="mcq-6" id="mcq-6-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">dẫn nhiệt</span></label><label class="option" for="mcq-6-C"><input type="radio" name="mcq-6" id="mcq-6-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">đối lưu</span></label><label class="option" for="mcq-6-D"><input type="radio" name="mcq-6" id="mcq-6-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">dẫn nhiệt và đối lưu</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-6" data-answer="A" data-points="0.25" role="radiogroup"><label class="option" for="mcq-6-A"><input type="radio" name="mcq-6" id="mcq-6-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">bức xạ nhiệt</span></label><label class="option" for="mcq-6-B"><input type="radio" name="mcq-6" id="mcq-6-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">dẫn nhiệt</span></label><label class="option" for="mcq-6-C"><input type="radio" name="mcq-6" id="mcq-6-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">đối lưu</span></label><label class="option" for="mcq-6-D"><input type="radio" name="mcq-6" id="mcq-6-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">dẫn nhiệt và đối lưu</span></label></div>
 <p class="question"><strong>Câu 7.</strong> Để đo cường độ dòng điện qua bóng đèn, ta mắc ampe kế</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-7-A"><input type="radio" name="mcq-7" id="mcq-7-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">song song với đèn.</span></label><label class="option" for="mcq-7-B"><input type="radio" name="mcq-7" id="mcq-7-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">nối tiếp với đèn, chốt (−) về phía cực dương nguồn.</span></label><label class="option" for="mcq-7-C"><input type="radio" name="mcq-7" id="mcq-7-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">nối tiếp với đèn, chốt (+) về phía cực dương nguồn.</span></label><label class="option" for="mcq-7-D"><input type="radio" name="mcq-7" id="mcq-7-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">song song với nguồn.</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-7" data-answer="C" data-points="0.25" role="radiogroup"><label class="option" for="mcq-7-A"><input type="radio" name="mcq-7" id="mcq-7-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">song song với đèn.</span></label><label class="option" for="mcq-7-B"><input type="radio" name="mcq-7" id="mcq-7-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">nối tiếp với đèn, chốt (−) về phía cực dương nguồn.</span></label><label class="option" for="mcq-7-C"><input type="radio" name="mcq-7" id="mcq-7-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">nối tiếp với đèn, chốt (+) về phía cực dương nguồn.</span></label><label class="option" for="mcq-7-D"><input type="radio" name="mcq-7" id="mcq-7-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">song song với nguồn.</span></label></div>
 <p class="question"><strong>Câu 8.</strong> Chiếu một tia sáng tới gương phẳng với góc tới 35°. Góc hợp bởi tia tới và tia phản xạ là</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-8-A"><input type="radio" name="mcq-8" id="mcq-8-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">35°</span></label><label class="option" for="mcq-8-B"><input type="radio" name="mcq-8" id="mcq-8-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">55°</span></label><label class="option" for="mcq-8-C"><input type="radio" name="mcq-8" id="mcq-8-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">110°</span></label><label class="option" for="mcq-8-D"><input type="radio" name="mcq-8" id="mcq-8-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">70°</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-8" data-answer="D" data-points="0.25" role="radiogroup"><label class="option" for="mcq-8-A"><input type="radio" name="mcq-8" id="mcq-8-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">35°</span></label><label class="option" for="mcq-8-B"><input type="radio" name="mcq-8" id="mcq-8-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">55°</span></label><label class="option" for="mcq-8-C"><input type="radio" name="mcq-8" id="mcq-8-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">110°</span></label><label class="option" for="mcq-8-D"><input type="radio" name="mcq-8" id="mcq-8-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">70°</span></label></div>
 <p class="section"><strong>II. Câu trắc nghiệm đúng sai</strong> <em>(2,0 điểm)</em></p>
 <p><em>Thí sinh trả lời Câu 1 và Câu 2. Trong mỗi ý a), b), c), d) thí sinh chọn đúng hoặc sai.</em></p>
 <p class="question"><strong>Câu 1.</strong> Một chiếc vương miện làm bằng hợp kim vàng – bạc có khối lượng 1,0 kg. Treo vương miện vào lực kế rồi nhúng chìm hoàn toàn trong nước thì số chỉ lực kế giảm 0,6 N so với khi treo trong không khí. Cho khối lượng riêng của vàng 19,3 g/cm³, của bạc 10,5 g/cm³, của nước 1 g/cm³; lấy P = 10m; coi thể tích hợp kim bằng tổng thể tích các kim loại thành phần.</p>
-<div class="tf-item"><div class="tf-stem"><strong>a)</strong> Thể tích của vương miện là 60 cm³.</div><div class="tf-choices" role="radiogroup" aria-label="Ý a"><label class="tf-choice" for="tf-1-a-dung"><input type="radio" name="tf-1-a" id="tf-1-a-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-a-sai"><input type="radio" name="tf-1-a" id="tf-1-a-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>b)</strong> Khối lượng riêng trung bình của vương miện xấp xỉ 16,7 g/cm³, nên vương miện không làm bằng vàng nguyên chất.</div><div class="tf-choices" role="radiogroup" aria-label="Ý b"><label class="tf-choice" for="tf-1-b-dung"><input type="radio" name="tf-1-b" id="tf-1-b-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-b-sai"><input type="radio" name="tf-1-b" id="tf-1-b-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>c)</strong> Khối lượng vàng trong vương miện khoảng 700 g.</div><div class="tf-choices" role="radiogroup" aria-label="Ý c"><label class="tf-choice" for="tf-1-c-dung"><input type="radio" name="tf-1-c" id="tf-1-c-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-c-sai"><input type="radio" name="tf-1-c" id="tf-1-c-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>d)</strong> Khi treo trong không khí lực kế chỉ 10 N, khi nhúng chìm trong nước lực kế chỉ 9,4 N.</div><div class="tf-choices" role="radiogroup" aria-label="Ý d"><label class="tf-choice" for="tf-1-d-dung"><input type="radio" name="tf-1-d" id="tf-1-d-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-d-sai"><input type="radio" name="tf-1-d" id="tf-1-d-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-1-a" data-answer="Đúng" data-points="0.25"><div class="tf-stem"><strong>a)</strong> Thể tích của vương miện là 60 cm³.</div><div class="tf-choices" role="radiogroup" aria-label="Ý a"><label class="tf-choice" for="tf-1-a-dung"><input type="radio" name="tf-1-a" id="tf-1-a-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-a-sai"><input type="radio" name="tf-1-a" id="tf-1-a-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-1-b" data-answer="Đúng" data-points="0.25"><div class="tf-stem"><strong>b)</strong> Khối lượng riêng trung bình của vương miện xấp xỉ 16,7 g/cm³, nên vương miện không làm bằng vàng nguyên chất.</div><div class="tf-choices" role="radiogroup" aria-label="Ý b"><label class="tf-choice" for="tf-1-b-dung"><input type="radio" name="tf-1-b" id="tf-1-b-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-b-sai"><input type="radio" name="tf-1-b" id="tf-1-b-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-1-c" data-answer="Sai" data-points="0.25"><div class="tf-stem"><strong>c)</strong> Khối lượng vàng trong vương miện khoảng 700 g.</div><div class="tf-choices" role="radiogroup" aria-label="Ý c"><label class="tf-choice" for="tf-1-c-dung"><input type="radio" name="tf-1-c" id="tf-1-c-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-c-sai"><input type="radio" name="tf-1-c" id="tf-1-c-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-1-d" data-answer="Đúng" data-points="0.25"><div class="tf-stem"><strong>d)</strong> Khi treo trong không khí lực kế chỉ 10 N, khi nhúng chìm trong nước lực kế chỉ 9,4 N.</div><div class="tf-choices" role="radiogroup" aria-label="Ý d"><label class="tf-choice" for="tf-1-d-dung"><input type="radio" name="tf-1-d" id="tf-1-d-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-d-sai"><input type="radio" name="tf-1-d" id="tf-1-d-sai" value="Sai" /><span>Sai</span></label></div></div>
 <p class="question"><strong>Câu 2.</strong> Coi Trái Đất chuyển động tròn đều quanh Mặt Trời với bán kính quỹ đạo 1,5.10⁸ km, chu kì 365 ngày. Tốc độ ánh sáng 3.10⁵ km/s. Lấy π = 3,14.</p>
-<div class="tf-item"><div class="tf-stem"><strong>a)</strong> Tốc độ chuyển động của Trái Đất quanh Mặt Trời xấp xỉ 30 km/s.</div><div class="tf-choices" role="radiogroup" aria-label="Ý a"><label class="tf-choice" for="tf-2-a-dung"><input type="radio" name="tf-2-a" id="tf-2-a-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-a-sai"><input type="radio" name="tf-2-a" id="tf-2-a-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>b)</strong> Ánh sáng từ Mặt Trời đến Trái Đất mất khoảng 8,3 giây.</div><div class="tf-choices" role="radiogroup" aria-label="Ý b"><label class="tf-choice" for="tf-2-b-dung"><input type="radio" name="tf-2-b" id="tf-2-b-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-b-sai"><input type="radio" name="tf-2-b" id="tf-2-b-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>c)</strong> Mặt Trăng quay quanh Trái Đất một vòng mất khoảng 1 năm.</div><div class="tf-choices" role="radiogroup" aria-label="Ý c"><label class="tf-choice" for="tf-2-c-dung"><input type="radio" name="tf-2-c" id="tf-2-c-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-c-sai"><input type="radio" name="tf-2-c" id="tf-2-c-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>d)</strong> Trong 1 giờ, Trái Đất tự quay quanh trục được một góc 15°.</div><div class="tf-choices" role="radiogroup" aria-label="Ý d"><label class="tf-choice" for="tf-2-d-dung"><input type="radio" name="tf-2-d" id="tf-2-d-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-d-sai"><input type="radio" name="tf-2-d" id="tf-2-d-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-2-a" data-answer="Đúng" data-points="0.25"><div class="tf-stem"><strong>a)</strong> Tốc độ chuyển động của Trái Đất quanh Mặt Trời xấp xỉ 30 km/s.</div><div class="tf-choices" role="radiogroup" aria-label="Ý a"><label class="tf-choice" for="tf-2-a-dung"><input type="radio" name="tf-2-a" id="tf-2-a-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-a-sai"><input type="radio" name="tf-2-a" id="tf-2-a-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-2-b" data-answer="Sai" data-points="0.25"><div class="tf-stem"><strong>b)</strong> Ánh sáng từ Mặt Trời đến Trái Đất mất khoảng 8,3 giây.</div><div class="tf-choices" role="radiogroup" aria-label="Ý b"><label class="tf-choice" for="tf-2-b-dung"><input type="radio" name="tf-2-b" id="tf-2-b-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-b-sai"><input type="radio" name="tf-2-b" id="tf-2-b-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-2-c" data-answer="Sai" data-points="0.25"><div class="tf-stem"><strong>c)</strong> Mặt Trăng quay quanh Trái Đất một vòng mất khoảng 1 năm.</div><div class="tf-choices" role="radiogroup" aria-label="Ý c"><label class="tf-choice" for="tf-2-c-dung"><input type="radio" name="tf-2-c" id="tf-2-c-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-c-sai"><input type="radio" name="tf-2-c" id="tf-2-c-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-2-d" data-answer="Đúng" data-points="0.25"><div class="tf-stem"><strong>d)</strong> Trong 1 giờ, Trái Đất tự quay quanh trục được một góc 15°.</div><div class="tf-choices" role="radiogroup" aria-label="Ý d"><label class="tf-choice" for="tf-2-d-dung"><input type="radio" name="tf-2-d" id="tf-2-d-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-d-sai"><input type="radio" name="tf-2-d" id="tf-2-d-sai" value="Sai" /><span>Sai</span></label></div></div>
 <p class="section"><strong>III. Câu trắc nghiệm trả lời ngắn</strong> <em>(2,0 điểm)</em></p>
 <p><em>Thí sinh trả lời từ Câu 1 đến Câu 4.</em></p>
 <p class="question"><strong>Câu 1.</strong> Đổ 300 g nước ở 90 °C vào 200 g nước ở 20 °C. Bỏ qua trao đổi nhiệt với bình và môi trường. Nhiệt độ cân bằng bằng bao nhiêu °C?</p>
+<div class="short-wrap grade-item" data-kind="short" data-name="short-1" data-answer="62" data-points="0.5"><label class="short-label">Đáp án Câu 1: <input type="text" class="short-input" name="short-1" autocomplete="off" /></label></div>
 <p class="question"><strong>Câu 2.</strong> Một quả cầu đặc có thể tích 200 cm³ nổi trên mặt nước với 1/4 thể tích chìm trong nước. Khối lượng riêng của quả cầu bằng bao nhiêu kg/m³?</p>
+<div class="short-wrap grade-item" data-kind="short" data-name="short-2" data-answer="250" data-points="0.5"><label class="short-label">Đáp án Câu 2: <input type="text" class="short-input" name="short-2" autocomplete="off" /></label></div>
 <p class="question"><strong>Câu 3.</strong> Một người đứng trước gương phẳng, cách gương 2 m. Giữ người đứng yên, dịch gương ra xa người thêm 0,5 m (gương vẫn song song với vị trí cũ). Khoảng cách giữa người và ảnh mới bằng bao nhiêu mét?</p>
+<div class="short-wrap grade-item" data-kind="short" data-name="short-3" data-answer="5" data-points="0.5"><label class="short-label">Đáp án Câu 3: <input type="text" class="short-input" name="short-3" autocomplete="off" /></label></div>
 <p class="question"><strong>Câu 4.</strong> Một bóng đèn sợi đốt công suất 60 W có hiệu suất phát sáng 5 %. Năng lượng ánh sáng đèn phát ra trong 1 phút bằng bao nhiêu J?</p>
+<div class="short-wrap grade-item" data-kind="short" data-name="short-4" data-answer="180" data-points="0.5"><label class="short-label">Đáp án Câu 4: <input type="text" class="short-input" name="short-4" autocomplete="off" /></label></div>
 <p class="section"><strong>PHẦN B. PHẦN TỰ LUẬN</strong> <em>(14,0 điểm)</em></p>
 <p><em>Thí sinh làm bài từ Câu I đến Câu VI.</em></p>
 <p class="question"><strong>Câu I. (2,0 điểm)</strong></p>
@@ -103,32 +162,197 @@ h1 { font-size: 20px; margin: 0 0 8px; color: #0b1f3a; }
 <p>1. Tính tổng chi phí (tiền mua bóng và tiền điện) khi dùng mỗi loại đèn trong 25 000 giờ chiếu sáng. Dùng đèn LED tiết kiệm được bao nhiêu tiền?</p>
 <p>2. Tính lượng CO₂ giảm được khi dùng đèn LED trong 25 000 giờ.</p>
 <p>3. Giải thích vì sao đèn LED tiết kiệm điện hơn đèn sợi đốt.</p>
+<div class="answer-panel" data-cau="I"><p class="answer-panel-title">Trả lời Câu I (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-5-I" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="question"><strong>Câu II. (2,0 điểm)</strong></p>
 <p>Một nhiệt lượng kế bằng đồng khối lượng 100 g chứa 500 g nước ở 15 °C. Thả vào đó một thỏi hợp kim nhôm – thiếc khối lượng 200 g đã được nung nóng tới 120 °C. Nhiệt độ khi cân bằng là 20 °C. Nhiệt dung riêng của đồng, nước, nhôm, thiếc lần lượt là 380; 4200; 880; 230 J/(kg.K). Bỏ qua trao đổi nhiệt với môi trường.</p>
 <p>1. Tính khối lượng nhôm và thiếc trong hợp kim.</p>
 <p>2. Sau đó thả tiếp vào nhiệt lượng kế 50 g nước đá ở 0 °C. Tính nhiệt độ cuối cùng của hệ. Cho nhiệt nóng chảy của nước đá λ = 3,4.10⁵ J/kg.</p>
+<div class="answer-panel" data-cau="II"><p class="answer-panel-title">Trả lời Câu II (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-5-II" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="question"><strong>Câu III. (2,0 điểm)</strong></p>
 <p>Một bể nước có đáy phẳng nằm ngang, mực nước sâu 1,2 m. Một chiếc cọc thẳng đứng cao 2 m được cắm ở đáy bể. Tia nắng chiếu tới mặt nước với góc tới i có sin i = 0,8. Chiết suất của nước n = 4/3 (sin i = n.sin r).</p>
 <p>1. Tính độ dài bóng của cọc trên đáy bể.</p>
 <p>2. Nếu bể cạn hết nước thì bóng của cọc trên đáy dài bao nhiêu? So sánh với câu 1.</p>
 <p>3. Một người nhìn gần như vuông góc xuống mặt nước sẽ thấy đáy bể ở độ sâu khoảng bao nhiêu? Vì sao?</p>
+<div class="answer-panel" data-cau="III"><p class="answer-panel-title">Trả lời Câu III (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-5-III" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="question"><strong>Câu IV. (2,0 điểm)</strong></p>
 <p>Một chiếc cốc hình trụ thành mỏng có khối lượng 100 g, tiết diện đáy S = 20 cm², chiều cao 15 cm, được thả nổi thẳng đứng trong một bể nước rộng. Khối lượng riêng của nước 1000 kg/m³, của dầu 800 kg/m³.</p>
 <p>1. Tính chiều cao phần cốc chìm trong nước.</p>
 <p>2. Đổ dầu vào cốc. Tính chiều cao tối đa của cột dầu trong cốc để nước trong bể chưa tràn vào cốc.</p>
 <p>3. Thay dầu bằng nước. Đổ nước vào cốc đến độ cao bao nhiêu thì nước trong bể bắt đầu tràn vào cốc?</p>
+<div class="answer-panel" data-cau="IV"><p class="answer-panel-title">Trả lời Câu IV (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-5-IV" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="question"><strong>Câu V. (3,0 điểm)</strong></p>
 <p>Hai điện trở R₁ = 30 Ω và R₂ mắc nối tiếp vào nguồn có hiệu điện thế U = 12 V không đổi. Dùng một vôn kế (có điện trở R<sub>V</sub> hữu hạn) mắc vào hai đầu R₁ thì vôn kế chỉ 6 V; mắc vôn kế vào hai đầu R₂ thì vôn kế chỉ 4 V.</p>
 <p>1. Tính R₂ và R<sub>V</sub>.</p>
 <p>2. Tính hiệu điện thế thực tế giữa hai đầu mỗi điện trở khi không mắc vôn kế.</p>
 <p>3. Muốn khi mắc vôn kế vào hai đầu R₁ số chỉ của vôn kế sai lệch không quá 2 % so với giá trị thực thì điện trở vôn kế tối thiểu phải bằng bao nhiêu?</p>
+<div class="answer-panel" data-cau="V"><p class="answer-panel-title">Trả lời Câu V (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-5-V" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="question"><strong>Câu VI. (3,0 điểm)</strong></p>
 <p>Hai vận động viên chạy trên một đường đua hình tròn chu vi 400 m, xuất phát cùng lúc tại cùng một điểm O. Vận động viên 1 chạy với tốc độ 5 m/s, vận động viên 2 chạy với tốc độ 3 m/s.</p>
 <p>1. Hai người chạy cùng chiều. Sau bao lâu họ gặp nhau lần đầu? Vị trí gặp cách O bao nhiêu mét (đo theo chiều chạy)?</p>
 <p>2. Hai người chạy ngược chiều. Trong 10 phút đầu họ gặp nhau bao nhiêu lần? Trong đó có bao nhiêu lần gặp nhau tại O?</p>
 <p>3. Hai người chạy cùng chiều; sau lần gặp đầu tiên, vận động viên 1 giảm tốc độ xuống 4 m/s. Sau bao lâu nữa họ gặp lại nhau?</p>
+<div class="answer-panel" data-cau="VI"><p class="answer-panel-title">Trả lời Câu VI (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-5-VI" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="end">-------------------- HẾT --------------------</p>
 <p><br/></p>
+<div class="submit-bar"><button type="button" id="submit-btn">Nộp bài &amp; chấm điểm</button><div id="score-box" hidden></div></div>
 </div>
+<script>
+
+(function () {
+  var locked = false;
+  function norm(v) {
+    return String(v == null ? "" : v)
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/,/g, ".");
+  }
+  function selectedValue(name) {
+    var el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : "";
+  }
+  function setFieldValue(name, kind, value) {
+    if (kind === "mcq" || kind === "tf" || kind === "essay-radio") {
+      var radios = document.querySelectorAll('input[type=radio][name="' + name + '"]');
+      radios.forEach(function (inp) {
+        inp.checked = norm(inp.value) === norm(value);
+      });
+      return;
+    }
+    var input = document.querySelector('input[type=text][name="' + name + '"]');
+    if (input) input.value = value == null ? "" : String(value);
+  }
+  function highlightCorrectChoice(item, answer) {
+    var inputs = item.querySelectorAll("input[type=radio]");
+    inputs.forEach(function (inp) {
+      var lab = inp.closest("label");
+      if (!lab) return;
+      lab.classList.remove("is-key");
+      if (norm(inp.value) === norm(answer)) lab.classList.add("is-key");
+    });
+  }
+  function markItem(item, ok) {
+    item.classList.remove("is-correct", "is-wrong");
+    item.classList.add(ok ? "is-correct" : "is-wrong");
+    var old = item.querySelector(".grade-feedback");
+    if (old) old.remove();
+    var ans = item.getAttribute("data-answer") || "";
+    var kind = item.getAttribute("data-kind");
+    if (kind === "mcq" || kind === "tf" || kind === "essay-radio") {
+      highlightCorrectChoice(item, ans);
+    }
+    var fb = document.createElement("span");
+    fb.className = "grade-feedback";
+    if (ok) {
+      fb.textContent = "Đúng";
+    } else {
+      fb.innerHTML = 'Sai — đáp án: <strong class="correct-ans"></strong>';
+      fb.querySelector(".correct-ans").textContent = ans;
+    }
+    item.appendChild(fb);
+  }
+  function lockInputs() {
+    document.querySelectorAll(".grade-item input, .essay-textarea").forEach(function (inp) {
+      inp.disabled = true;
+    });
+    var btn = document.getElementById("submit-btn");
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Đã nộp bài";
+    }
+  }
+  function showScore(earned, total, note) {
+    var box = document.getElementById("score-box");
+    if (!box) return;
+    box.hidden = false;
+    box.innerHTML =
+      "<strong>Điểm: " +
+      Number(earned).toFixed(2).replace(".", ",") +
+      " / " +
+      Number(total).toFixed(2).replace(".", ",") +
+      "</strong>" +
+      '<span class="score-note"> ' +
+      (note || "(đúng: xanh · sai: đỏ, kèm đáp án đúng)") +
+      "</span>";
+  }
+  function restoreResult(payload) {
+    if (!payload || !payload.items) return;
+    locked = true;
+    payload.items.forEach(function (row) {
+      setFieldValue(row.name, row.kind, row.userAnswer);
+      var item = document.querySelector('.grade-item[data-name="' + row.name + '"]');
+      if (item) markItem(item, !!row.correct);
+    });
+    lockInputs();
+    showScore(payload.score, payload.maxScore, "(xem lại bài đã nộp — không làm lại)");
+  }
+  function grade() {
+    if (locked) return;
+    var total = 0;
+    var earned = 0;
+    var details = [];
+    var items = document.querySelectorAll(".grade-item[data-answer]");
+    items.forEach(function (item) {
+      var pts = parseFloat(item.getAttribute("data-points") || "0") || 0;
+      total += pts;
+      var kind = item.getAttribute("data-kind");
+      var name = item.getAttribute("data-name");
+      var answer = item.getAttribute("data-answer") || "";
+      var user = "";
+      if (kind === "mcq" || kind === "tf" || kind === "essay-radio") {
+        user = selectedValue(name);
+      } else {
+        var input = item.querySelector("input[type=text]");
+        user = input ? input.value : "";
+      }
+      var ok = norm(user) !== "" && norm(user) === norm(answer);
+      var got = ok ? pts : 0;
+      if (ok) earned += pts;
+      details.push({
+        name: name || "",
+        kind: kind || "",
+        userAnswer: user,
+        correctAnswer: answer,
+        correct: ok,
+        points: pts,
+        earned: got,
+      });
+      markItem(item, ok);
+    });
+    locked = true;
+    lockInputs();
+    showScore(earned, total, "(đúng: xanh · sai: đỏ, kèm đáp án đúng)");
+    try {
+      var examNum = parseInt(document.body.getAttribute("data-exam-num") || "0", 10);
+      var examTitle = document.body.getAttribute("data-exam-title") || ("Đề số " + examNum);
+      window.parent.postMessage(
+        {
+          type: "practice-result",
+          payload: {
+            examNum: examNum,
+            examTitle: examTitle,
+            score: Math.round(earned * 100) / 100,
+            maxScore: Math.round(total * 100) / 100,
+            items: details,
+          },
+        },
+        window.location.origin
+      );
+    } catch (e) {}
+  }
+  window.addEventListener("message", function (event) {
+    if (event.origin !== window.location.origin) return;
+    var data = event.data;
+    if (!data || data.type !== "practice-restore") return;
+    restoreResult(data.payload);
+  });
+  try {
+    window.parent.postMessage({ type: "practice-ready" }, window.location.origin);
+  } catch (e) {}
+  var btn = document.getElementById("submit-btn");
+  if (btn) btn.addEventListener("click", grade);
+})();
+
+</script>
 </body>
 </html>

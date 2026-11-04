@@ -6,6 +6,8 @@ import type {
   UpdateUserPayload,
   User,
   ActivityEntry,
+  PracticeResult,
+  PracticeResultSummary,
 } from "./types";
 
 export function listUsers(params: ListUsersParams = {}) {
@@ -38,6 +40,18 @@ export function updateUser(id: string, payload: UpdateUserPayload) {
 
 export function listUserActivity(id: string) {
   return request<ActivityEntry[]>(`/admin/users/${id}/activity`);
+}
+
+export function listUserPracticeResults(id: string) {
+  return request<PracticeResultSummary[]>(
+    `/admin/users/${id}/practice-results`,
+  );
+}
+
+export function getUserPracticeResult(userId: string, resultId: string) {
+  return request<PracticeResult>(
+    `/admin/users/${userId}/practice-results/${resultId}`,
+  );
 }
 
 export function recordActivity(path: string, title: string) {

@@ -1,0 +1,1658 @@
+{
+  "1": {
+    "num": 1,
+    "mcq": {
+      "1": "C",
+      "2": "A",
+      "3": "B",
+      "4": "B",
+      "5": "B",
+      "6": "C",
+      "7": "B",
+      "8": "D"
+    },
+    "tf": {
+      "1-a": "Đúng",
+      "1-b": "Đúng",
+      "1-c": "Sai",
+      "1-d": "Đúng",
+      "2-a": "Đúng",
+      "2-b": "Sai",
+      "2-c": "Đúng",
+      "2-d": "Sai"
+    },
+    "short": {
+      "1": "6",
+      "2": "630",
+      "3": "80",
+      "4": "5"
+    },
+    "shortPoints": 0.5,
+    "mcqPoints": 0.25,
+    "tfPoints": 0.25,
+    "essay": {
+      "I": [
+        {
+          "text": "1. Công có ích: Aci = [450000] J.",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. Công có ích: Aci = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " J."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "450000",
+              "points": 0.5
+            }
+          ]
+        },
+        {
+          "text": "H = [62,5] %.",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "H = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " %."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "62,5",
+              "points": 0.5
+            }
+          ]
+        },
+        {
+          "text": "2. Tiền điện: T = [30] nghìn đồng.",
+          "points": 1.0,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. Tiền điện: T = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " nghìn đồng."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "30",
+              "points": 1.0
+            }
+          ]
+        }
+      ],
+      "II": [
+        {
+          "text": "1. t₁ ≈ [149,3] °C.",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. t₁ ≈ "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " °C."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "149,3",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "2. t ≈ [38,6] °C.",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. t ≈ "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " °C."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "38,6",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "3.  t₁' ≈ [162,6] °C.",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "3.  t₁' ≈ "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " °C."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "162,6",
+              "points": 0.5
+            }
+          ]
+        }
+      ],
+      "III": [
+        {
+          "text": "2. IH₁ = [10] cm.",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. IH₁ = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " cm."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "10",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "JH₂ = [50] cm.",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "JH₂ = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " cm."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "50",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "SM ≈ [84,9] cm. Làm tròn đến hàng phần chục",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "SM ≈ "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " cm. Làm tròn đến hàng phần chục"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "84,9",
+              "points": 0.5
+            }
+          ]
+        }
+      ],
+      "IV": [
+        {
+          "text": "1. Độ chênh lệch giữa mặt thoáng của dầu ở nhánh trái và mặt thoáng của nước ở nhánh phải là [4] cm",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. Độ chênh lệch giữa mặt thoáng của dầu ở nhánh trái và mặt thoáng của nước ở nhánh phải là "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " cm"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "4",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "2.  So với lúc chưa đổ dầu, mực nước ở nhánh phải dâng lên ≈ [5,33] cm. Làm tròn đến hàng phần trăm",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2.  So với lúc chưa đổ dầu, mực nước ở nhánh phải dâng lên ≈ "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " cm. Làm tròn đến hàng phần trăm"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "5,33",
+              "points": 0.5
+            }
+          ]
+        },
+        {
+          "text": "3. Mặt thoáng dầu {dâng lên/hạ xuống/giữ nguyên} [dâng lên]",
+          "points": 0.25,
+          "segments": [
+            {
+              "type": "text",
+              "text": "3. Mặt thoáng dầu "
+            },
+            {
+              "type": "radio",
+              "fieldId": "f0",
+              "options": [
+                "dâng lên",
+                "hạ xuống",
+                "giữ nguyên"
+              ]
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "radio",
+              "answer": "dâng lên",
+              "options": [
+                "dâng lên",
+                "hạ xuống",
+                "giữ nguyên"
+              ],
+              "points": 0.25
+            }
+          ]
+        },
+        {
+          "text": "khoảng [1,33] cm. Làm tròn đến hàng phần trăm",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "khoảng "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " cm. Làm tròn đến hàng phần trăm"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "1,33",
+              "points": 0.5
+            }
+          ]
+        }
+      ],
+      "V": [
+        {
+          "text": "1. I₁ = [1,5] A.",
+          "points": 0.25,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. I₁ = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " A."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "1,5",
+              "points": 0.25
+            }
+          ]
+        },
+        {
+          "text": "I₂ = [1] A",
+          "points": 0.25,
+          "segments": [
+            {
+              "type": "text",
+              "text": "I₂ = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " A"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "1",
+              "points": 0.25
+            }
+          ]
+        },
+        {
+          "text": "Pₓ = [3] W.",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Pₓ = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " W."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "3",
+              "points": 0.5
+            }
+          ]
+        },
+        {
+          "text": "2. Pₓ max = [5,4] W . Làm tròn đến hàng phần chục",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. Pₓ max = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " W . Làm tròn đến hàng phần chục"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "5,4",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "Rₓ = [2,4] Ω. Làm tròn đến hàng phần chục",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Rₓ = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " Ω. Làm tròn đến hàng phần chục"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "2,4",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "3. Có thể điều chỉnh Rₓ để đèn sáng bình thường được không?{Có/Không} [Có]",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "3. Có thể điều chỉnh Rₓ để đèn sáng bình thường được không?"
+            },
+            {
+              "type": "radio",
+              "fieldId": "f0",
+              "options": [
+                "Có",
+                "Không"
+              ]
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "radio",
+              "answer": "Có",
+              "options": [
+                "Có",
+                "Không"
+              ],
+              "points": 0.5
+            }
+          ]
+        }
+      ],
+      "VI": [
+        {
+          "text": "1. Gặp nhau lần 1 lúc [8] giờ",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. Gặp nhau lần 1 lúc "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " giờ"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "8",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "Cách A [40] km.",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Cách A "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " km."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "40",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "2. Gặp nhau lần 2 lúc [10] giờ [20] phút",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. Gặp nhau lần 2 lúc "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " giờ "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f1"
+            },
+            {
+              "type": "text",
+              "text": " phút"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "10",
+              "points": 0.375
+            },
+            {
+              "id": "f1",
+              "kind": "fill",
+              "answer": "20",
+              "points": 0.375
+            }
+          ]
+        },
+        {
+          "text": "Cách A  [6,67] km. Làm tròn đến hàng phần trăm",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Cách A  "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " km. Làm tròn đến hàng phần trăm"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "6,67",
+              "points": 0.75
+            }
+          ]
+        }
+      ]
+    },
+    "hasEssayKey": true
+  },
+  "2": {
+    "num": 2,
+    "mcq": {
+      "1": "B",
+      "2": "B",
+      "3": "A",
+      "4": "B",
+      "5": "D",
+      "6": "B",
+      "7": "A",
+      "8": "C"
+    },
+    "tf": {
+      "1-a": "Đúng",
+      "1-b": "Đúng",
+      "1-c": "Sai",
+      "1-d": "Đúng",
+      "2-a": "Đúng",
+      "2-b": "Đúng",
+      "2-c": "Sai",
+      "2-d": "Đúng"
+    },
+    "short": {
+      "1": "200",
+      "2": "3333",
+      "3": "27,5",
+      "4": "48"
+    },
+    "shortPoints": 0.5,
+    "mcqPoints": 0.25,
+    "tfPoints": 0.25,
+    "essay": {
+      "I": [
+        {
+          "text": "1. Công suất điện: P = [288] W.",
+          "points": 1.0,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. Công suất điện: P = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " W."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "288",
+              "points": 1.0
+            }
+          ]
+        },
+        {
+          "text": "2. Cần tối thiểu [7] tấm pin.",
+          "points": 1.0,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. Cần tối thiểu "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " tấm pin."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "7",
+              "points": 1.0
+            }
+          ]
+        }
+      ],
+      "II": [
+        {
+          "text": "1. Nước đá có tan hết không? {Có/Không} [Có]",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. Nước đá có tan hết không? "
+            },
+            {
+              "type": "radio",
+              "fieldId": "f0",
+              "options": [
+                "Có",
+                "Không"
+              ]
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "radio",
+              "answer": "Có",
+              "options": [
+                "Có",
+                "Không"
+              ],
+              "points": 0.5
+            }
+          ]
+        },
+        {
+          "text": "Nhiệt độ khi cân bằng nhiệt ≈ [10,7] °C. Làm tròn đến chữ số hàng chục",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Nhiệt độ khi cân bằng nhiệt ≈ "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " °C. Làm tròn đến chữ số hàng chục"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "10,7",
+              "points": 0.5
+            }
+          ]
+        },
+        {
+          "text": "2. Khối lượng nước đá cần thả: m = [149] g.",
+          "points": 1.0,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. Khối lượng nước đá cần thả: m = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " g."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "149",
+              "points": 1.0
+            }
+          ]
+        }
+      ],
+      "III": [
+        {
+          "text": "1. Ảnh [thật], [ngược] chiều",
+          "points": 0.25,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. Ảnh "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f1"
+            },
+            {
+              "type": "text",
+              "text": " chiều"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "thật",
+              "points": 0.125
+            },
+            {
+              "id": "f1",
+              "kind": "fill",
+              "answer": "ngược",
+              "points": 0.125
+            }
+          ]
+        },
+        {
+          "text": "Cách thấu kính [36] cm",
+          "points": 0.25,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Cách thấu kính "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " cm"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "36",
+              "points": 0.25
+            }
+          ]
+        },
+        {
+          "text": "Cao [4]cm",
+          "points": 0.25,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Cao "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": "cm"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "4",
+              "points": 0.25
+            }
+          ]
+        },
+        {
+          "text": "2. Vậy phải dịch thấu kính ra xa vật [2] cm hoặc [12] cm.",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. Vậy phải dịch thấu kính ra xa vật "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " cm hoặc "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f1"
+            },
+            {
+              "type": "text",
+              "text": " cm."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "2",
+              "points": 0.25
+            },
+            {
+              "id": "f1",
+              "kind": "fill",
+              "answer": "12",
+              "points": 0.25
+            }
+          ]
+        },
+        {
+          "text": "3. Khi d tăng từ 18 cm đến 30 cm: L giảm từ [54] cm xuống [48] cm rồi tăng lên [50] cm. (mỗi giá trị đúng được 0,25 điểm)",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "3. Khi d tăng từ 18 cm đến 30 cm: L giảm từ "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " cm xuống "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f1"
+            },
+            {
+              "type": "text",
+              "text": " cm rồi tăng lên "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f2"
+            },
+            {
+              "type": "text",
+              "text": " cm. (mỗi giá trị đúng được 0,25 điểm)"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "54",
+              "points": 0.25
+            },
+            {
+              "id": "f1",
+              "kind": "fill",
+              "answer": "48",
+              "points": 0.25
+            },
+            {
+              "id": "f2",
+              "kind": "fill",
+              "answer": "50",
+              "points": 0.25
+            }
+          ]
+        }
+      ],
+      "IV": [
+        {
+          "text": "1. Chiều cao phần gỗ chìm trong nước = [12] cm.",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. Chiều cao phần gỗ chìm trong nước = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " cm."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "12",
+              "points": 0.5
+            }
+          ]
+        },
+        {
+          "text": "2. Công tối thiểu để nhấn chìm hoàn toàn khối gỗ: A = [0,16] J.",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. Công tối thiểu để nhấn chìm hoàn toàn khối gỗ: A = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " J."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "0,16",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "3. Công tối thiểu để nhấn khối gỗ đến khi vừa chìm hoàn toàn: A = [0,08] J.",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "3. Công tối thiểu để nhấn khối gỗ đến khi vừa chìm hoàn toàn: A = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " J."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "0,08",
+              "points": 0.75
+            }
+          ]
+        }
+      ],
+      "V": [
+        {
+          "text": "1. Số chỉ Ampe kế IA = [1,5] A",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. Số chỉ Ampe kế IA = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " A"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "1,5",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "Dòng điện qua ampe kế có chiều từ [C] đến [D].",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Dòng điện qua ampe kế có chiều từ "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " đến "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f1"
+            },
+            {
+              "type": "text",
+              "text": "."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "C",
+              "points": 0.375
+            },
+            {
+              "id": "f1",
+              "kind": "fill",
+              "answer": "D",
+              "points": 0.375
+            }
+          ]
+        },
+        {
+          "text": "2. Vôn kế chỉ [6] V",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. Vôn kế chỉ "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " V"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "6",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "Cực dương mắc vào [C]",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Cực dương mắc vào "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "C",
+              "points": 0.75
+            }
+          ]
+        }
+      ],
+      "VI": [
+        {
+          "text": "1. Tốc độ của ca nô so với nước vc = [15] km/h",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "1. Tốc độ của ca nô so với nước vc = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " km/h"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "15",
+              "points": 0.5
+            }
+          ]
+        },
+        {
+          "text": "Tốc độ của dòng nước vn = [3] km/h.",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Tốc độ của dòng nước vn = "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " km/h."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "3",
+              "points": 0.5
+            }
+          ]
+        },
+        {
+          "text": "2. Ca nô tắt máy trôi theo dòng nước từ A đến B thì mất [12] giờ.",
+          "points": 0.75,
+          "segments": [
+            {
+              "type": "text",
+              "text": "2. Ca nô tắt máy trôi theo dòng nước từ A đến B thì mất "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " giờ."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "12",
+              "points": 0.75
+            }
+          ]
+        },
+        {
+          "text": "3. Kể từ lúc xuất phát, ca nô và bè gặp nhau sau [4] giờ",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "3. Kể từ lúc xuất phát, ca nô và bè gặp nhau sau "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " giờ"
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "4",
+              "points": 0.5
+            }
+          ]
+        },
+        {
+          "text": "tại điểm cách A [12] km.",
+          "points": 0.25,
+          "segments": [
+            {
+              "type": "text",
+              "text": "tại điểm cách A "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " km."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "12",
+              "points": 0.25
+            }
+          ]
+        },
+        {
+          "text": "Tổng quãng đường ca nô đi [60] km.",
+          "points": 0.5,
+          "segments": [
+            {
+              "type": "text",
+              "text": "Tổng quãng đường ca nô đi "
+            },
+            {
+              "type": "fill",
+              "fieldId": "f0"
+            },
+            {
+              "type": "text",
+              "text": " km."
+            }
+          ],
+          "fields": [
+            {
+              "id": "f0",
+              "kind": "fill",
+              "answer": "60",
+              "points": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    "hasEssayKey": true
+  },
+  "3": {
+    "num": 3,
+    "mcq": {
+      "1": "D",
+      "2": "B",
+      "3": "A",
+      "4": "C",
+      "5": "B",
+      "6": "A",
+      "7": "D",
+      "8": "C"
+    },
+    "tf": {
+      "1-a": "Đúng",
+      "1-b": "Đúng",
+      "1-c": "Sai",
+      "1-d": "Sai",
+      "2-a": "Đúng",
+      "2-b": "Đúng",
+      "2-c": "Sai",
+      "2-d": "Sai"
+    },
+    "short": {
+      "1": "15,4",
+      "2": "30",
+      "3": "800",
+      "4": "1020"
+    },
+    "shortPoints": 0.5,
+    "mcqPoints": 0.25,
+    "tfPoints": 0.25,
+    "essay": {},
+    "hasEssayKey": false
+  },
+  "4": {
+    "num": 4,
+    "mcq": {
+      "1": "C",
+      "2": "A",
+      "3": "B",
+      "4": "D",
+      "5": "A",
+      "6": "C",
+      "7": "B",
+      "8": "D"
+    },
+    "tf": {
+      "1-a": "Đúng",
+      "1-b": "Sai",
+      "1-c": "Đúng",
+      "1-d": "Đúng",
+      "2-a": "Đúng",
+      "2-b": "Đúng",
+      "2-c": "Sai",
+      "2-d": "Sai"
+    },
+    "short": {
+      "1": "200",
+      "2": "2000",
+      "3": "12,9",
+      "4": "8"
+    },
+    "shortPoints": 0.5,
+    "mcqPoints": 0.25,
+    "tfPoints": 0.25,
+    "essay": {},
+    "hasEssayKey": false
+  },
+  "5": {
+    "num": 5,
+    "mcq": {
+      "1": "A",
+      "2": "C",
+      "3": "B",
+      "4": "D",
+      "5": "B",
+      "6": "A",
+      "7": "C",
+      "8": "D"
+    },
+    "tf": {
+      "1-a": "Đúng",
+      "1-b": "Đúng",
+      "1-c": "Sai",
+      "1-d": "Đúng",
+      "2-a": "Đúng",
+      "2-b": "Sai",
+      "2-c": "Sai",
+      "2-d": "Đúng"
+    },
+    "short": {
+      "1": "62",
+      "2": "250",
+      "3": "5",
+      "4": "180"
+    },
+    "shortPoints": 0.5,
+    "mcqPoints": 0.25,
+    "tfPoints": 0.25,
+    "essay": {},
+    "hasEssayKey": false
+  },
+  "6": {
+    "num": 6,
+    "mcq": {
+      "1": "A",
+      "2": "C",
+      "3": "B",
+      "4": "D",
+      "5": "C",
+      "6": "B",
+      "7": "D",
+      "8": "A"
+    },
+    "tf": {
+      "1-a": "Đúng",
+      "1-b": "Sai",
+      "1-c": "Đúng",
+      "1-d": "Sai",
+      "2-a": "Đúng",
+      "2-b": "Sai",
+      "2-c": "Đúng",
+      "2-d": "Sai"
+    },
+    "short": {
+      "1": "17,5",
+      "2": "680",
+      "3": "20",
+      "4": "100000"
+    },
+    "shortPoints": 0.5,
+    "mcqPoints": 0.25,
+    "tfPoints": 0.25,
+    "essay": {},
+    "hasEssayKey": false
+  },
+  "7": {
+    "num": 7,
+    "mcq": {
+      "1": "B",
+      "2": "C",
+      "3": "A",
+      "4": "D",
+      "5": "B",
+      "6": "C",
+      "7": "A",
+      "8": "D"
+    },
+    "tf": {
+      "1-a": "Đúng",
+      "1-b": "Sai",
+      "1-c": "Đúng",
+      "1-d": "Sai",
+      "2-a": "Đúng",
+      "2-b": "Đúng",
+      "2-c": "Sai",
+      "2-d": "Đúng"
+    },
+    "short": {
+      "1": "257500",
+      "2": "12",
+      "3": "3000",
+      "4": "4,5"
+    },
+    "shortPoints": 0.5,
+    "mcqPoints": 0.25,
+    "tfPoints": 0.25,
+    "essay": {},
+    "hasEssayKey": false
+  },
+  "8": {
+    "num": 8,
+    "mcq": {
+      "1": "A",
+      "2": "C",
+      "3": "B",
+      "4": "D",
+      "5": "A",
+      "6": "C",
+      "7": "B",
+      "8": "D"
+    },
+    "tf": {
+      "1-a": "Đúng",
+      "1-b": "Sai",
+      "1-c": "Đúng",
+      "1-d": "Sai",
+      "2-a": "Đúng",
+      "2-b": "Đúng",
+      "2-c": "Đúng",
+      "2-d": "Sai"
+    },
+    "short": {
+      "1": "60",
+      "2": "2500",
+      "3": "12000",
+      "4": "6"
+    },
+    "shortPoints": 0.5,
+    "mcqPoints": 0.25,
+    "tfPoints": 0.25,
+    "essay": {},
+    "hasEssayKey": false
+  },
+  "9": {
+    "num": 9,
+    "mcq": {
+      "1": "B",
+      "2": "A",
+      "3": "D",
+      "4": "C",
+      "5": "A",
+      "6": "B",
+      "7": "C",
+      "8": "D"
+    },
+    "tf": {
+      "1-a": "Đúng",
+      "1-b": "Sai",
+      "1-c": "Đúng",
+      "1-d": "Đúng",
+      "2-a": "Sai",
+      "2-b": "Đúng",
+      "2-c": "Đúng",
+      "2-d": "Đúng"
+    },
+    "short": {
+      "1": "60",
+      "2": "900",
+      "3": "4400",
+      "4": "6"
+    },
+    "shortPoints": 0.5,
+    "mcqPoints": 0.25,
+    "tfPoints": 0.25,
+    "essay": {},
+    "hasEssayKey": false
+  },
+  "10": {
+    "num": 10,
+    "mcq": {
+      "1": "C",
+      "2": "A",
+      "3": "D",
+      "4": "B",
+      "5": "A",
+      "6": "C",
+      "7": "D",
+      "8": "B"
+    },
+    "tf": {
+      "1-a": "Đúng",
+      "1-b": "Đúng",
+      "1-c": "Sai",
+      "1-d": "Sai",
+      "2-a": "Đúng",
+      "2-b": "Đúng",
+      "2-c": "Sai",
+      "2-d": "Đúng"
+    },
+    "short": {
+      "1": "20",
+      "2": "20",
+      "3": "2,56",
+      "4": "20"
+    },
+    "shortPoints": 0.5,
+    "mcqPoints": 0.25,
+    "tfPoints": 0.25,
+    "essay": {},
+    "hasEssayKey": false
+  }
+}

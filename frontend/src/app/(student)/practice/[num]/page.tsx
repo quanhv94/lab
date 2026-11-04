@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import HsgExerciseView from "@/components/student/HsgExerciseView";
+import PracticeExamClient from "@/components/student/PracticeExamClient";
 import {
   PRACTICE_EXAMS,
   getPracticeExam,
@@ -41,7 +41,12 @@ export default async function PracticeExamPage({
         </p>
       </div>
 
-      <HsgExerciseView exerciseSrc={src} exerciseTitle={exam.title} />
+      <PracticeExamClient
+        examNum={exam.num}
+        examTitle={exam.title}
+        exerciseSrc={src}
+        hasEssayKey={!!exam.hasEssayKey}
+      />
     </div>
   );
 }

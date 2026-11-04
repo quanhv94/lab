@@ -21,17 +21,23 @@ h1 { font-size: 20px; margin: 0 0 8px; color: #0b1f3a; }
 .content table.exam-header p { margin: 0 0 4px; }
 .content table.exam-header p:last-child { margin-bottom: 0; }
 
-.options { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 16px; }
+.options {
+  display: flex; flex-direction: column; gap: 8px; margin: 8px 0 16px;
+  padding: 10px; border: 1px solid transparent; border-radius: 12px;
+}
 .option {
-  display: flex; align-items: flex-start; gap: 10px;
+  display: flex; align-items: center; gap: 10px;
   padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px;
   cursor: pointer; background: #fff; transition: border-color .15s, background .15s;
 }
 .option:hover { border-color: #93c5fd; background: #f8fbff; }
 .option:has(input:checked) { border-color: #3b82f6; background: #eff6ff; }
-.option input { margin-top: 4px; accent-color: #2563eb; flex-shrink: 0; }
-.opt-key { font-weight: 700; color: #0b1f3a; min-width: 1.4em; }
-.opt-text { flex: 1; }
+.option.is-key, .tf-choice.is-key, .essay-radio.is-key {
+  border-color: #16a34a !important; background: #f0fdf4 !important; color: #15803d;
+}
+.option input { margin: 0; accent-color: #2563eb; flex-shrink: 0; }
+.opt-key { font-weight: 700; color: #0b1f3a; min-width: 1.4em; line-height: 1.4; }
+.opt-text { flex: 1; line-height: 1.4; }
 .tf-item {
   display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px;
   margin: 8px 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px;
@@ -47,13 +53,62 @@ h1 { font-size: 20px; margin: 0 0 8px; color: #0b1f3a; }
 .tf-choice:hover { border-color: #93c5fd; background: #f0f7ff; }
 .tf-choice:has(input:checked) { border-color: #3b82f6; background: #eff6ff; color: #1e40af; }
 .tf-choice input { accent-color: #2563eb; }
+.short-wrap { margin: 8px 0 16px; }
+.short-label { font-weight: 600; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.short-input, .fill-input {
+  min-width: 7rem; max-width: 14rem; padding: 6px 10px;
+  border: 1px solid #cbd5e1; border-radius: 8px; font: inherit;
+}
+.fill-input { min-width: 4.5rem; margin: 0 4px; }
+.answer-panel {
+  margin: 12px 0 22px; padding: 14px 16px; border: 1px dashed #94a3b8;
+  border-radius: 12px; background: #f8fafc;
+}
+.answer-panel-title { margin: 0 0 10px; font-weight: 700; color: #0b1f3a; }
+.essay-row { margin: 0 0 10px; line-height: 1.7; }
+.essay-textarea {
+  width: 100%; box-sizing: border-box; padding: 10px 12px;
+  border: 1px solid #cbd5e1; border-radius: 10px; font: inherit; resize: vertical;
+}
+.essay-radios { display: inline-flex; flex-wrap: wrap; gap: 6px; vertical-align: middle; margin: 0 4px; }
+.essay-radio {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border: 1px solid #cbd5e1; border-radius: 999px;
+  background: #fff; cursor: pointer; font-weight: 600; font-size: 14px;
+}
+.essay-radio:has(input:checked) { border-color: #3b82f6; background: #eff6ff; }
+.inline-field { display: inline; }
+.grade-item.is-correct, .grade-item.is-correct.option, .tf-item.is-correct, .short-wrap.is-correct, .inline-field.is-correct {
+  border-color: #16a34a !important; background: #f0fdf4 !important;
+}
+.grade-item.is-wrong, .grade-item.is-wrong.option, .tf-item.is-wrong, .short-wrap.is-wrong, .inline-field.is-wrong {
+  border-color: #dc2626 !important; background: #fef2f2 !important;
+}
+.inline-field.is-correct .fill-input,
+.inline-field.is-wrong .fill-input { border-color: inherit; }
+.grade-feedback { display: inline-block; margin-left: 8px; font-size: 13px; font-weight: 600; }
+.is-correct > .grade-feedback, .is-correct .grade-feedback { color: #15803d; }
+.is-wrong > .grade-feedback, .is-wrong .grade-feedback { color: #b91c1c; }
+.correct-ans { color: #15803d; }
+.submit-bar {
+  position: sticky; bottom: 0; margin-top: 20px; padding: 14px 0 4px;
+  background: linear-gradient(to top, #fff 70%, transparent); display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+}
+#submit-btn {
+  appearance: none; border: 0; border-radius: 10px; padding: 12px 18px;
+  background: #1e4a7a; color: #fff; font-weight: 700; font-size: 15px; cursor: pointer;
+}
+#submit-btn:hover { background: #163a63; }
+#submit-btn:disabled { opacity: .7; cursor: default; }
+#score-box { font-size: 16px; color: #0b1f3a; }
+.score-note { color: #64748b; font-size: 13px; font-weight: 500; margin-left: 6px; }
 
 </style>
 </head>
-<body>
+<body data-exam-num="6" data-exam-title="Đề số 6">
 <a class="back" href="/practice">← Quay lại Đề luyện</a>
 <h1>Đề số 6</h1>
-<p class="meta">Đề ôn luyện HSG KHTN 9 · chọn đáp án trực tiếp trên đề</p>
+<p class="meta">Chấm tự động phần trắc nghiệm; tự luận dùng ô viết bài (không chấm tự động)</p>
 <div class="content">
 <table class="exam-header"><tr><td><p><strong>ĐỘI TUYỂN HSG KHTN 9</strong></p><p><strong>ĐỀ ÔN LUYỆN SỐ 06</strong></p><p><em>(Đề gồm Phần A và Phần B)</em></p></td><td><p><strong>ĐỀ ÔN THI CHỌN HỌC SINH GIỎI LỚP 9</strong></p><p>Môn: <strong>KHOA HỌC TỰ NHIÊN</strong></p><p><strong>(Mạch nội dung: Năng lượng và sự biến đổi)</strong></p><p>Thời gian làm bài: <em>150 phút</em></p><p><em>Chủ đề trọng tâm: Từ trường – Cảm ứng điện từ – Chuyển thể – Cơ năng – Lăng kính – Đòn bẩy – Đồ thị chuyển động</em></p></td></tr></table>
 <p><em>- Thí sinh làm bài trực tiếp vào đề thi (hoặc giấy thi). - Không sử dụng tài liệu. - Được dùng máy tính cầm tay.</em></p>
@@ -61,44 +116,48 @@ h1 { font-size: 20px; margin: 0 0 8px; color: #0b1f3a; }
 <p class="section"><strong>I. Câu trắc nghiệm nhiều phương án lựa chọn</strong> <em>(2,0 điểm)</em></p>
 <p><em>Thí sinh trả lời từ Câu 1 đến Câu 8. Mỗi câu hỏi thí sinh chỉ chọn một phương án đúng.</em></p>
 <p class="question"><strong>Câu 1.</strong> Bên ngoài một thanh nam châm, đường sức từ có chiều</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-1-A"><input type="radio" name="mcq-1" id="mcq-1-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">đi ra từ cực Bắc, đi vào cực Nam.</span></label><label class="option" for="mcq-1-B"><input type="radio" name="mcq-1" id="mcq-1-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">đi ra từ cực Nam, đi vào cực Bắc.</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-1" data-answer="A" data-points="0.25" role="radiogroup"><label class="option" for="mcq-1-A"><input type="radio" name="mcq-1" id="mcq-1-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">đi ra từ cực Bắc, đi vào cực Nam.</span></label><label class="option" for="mcq-1-B"><input type="radio" name="mcq-1" id="mcq-1-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">đi ra từ cực Nam, đi vào cực Bắc.</span></label></div>
 <p><strong>C.</strong> đi ra từ cả hai cực.	<strong>D.</strong> đi vào cả hai cực.</p>
 <p class="question"><strong>Câu 2.</strong> Máy phát điện xoay chiều hoạt động dựa trên</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-2-A"><input type="radio" name="mcq-2" id="mcq-2-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">tác dụng nhiệt của dòng điện.</span></label><label class="option" for="mcq-2-B"><input type="radio" name="mcq-2" id="mcq-2-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">lực từ tác dụng lên dây dẫn.</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-2" data-answer="C" data-points="0.25" role="radiogroup"><label class="option" for="mcq-2-A"><input type="radio" name="mcq-2" id="mcq-2-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">tác dụng nhiệt của dòng điện.</span></label><label class="option" for="mcq-2-B"><input type="radio" name="mcq-2" id="mcq-2-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">lực từ tác dụng lên dây dẫn.</span></label></div>
 <p><strong>C.</strong> hiện tượng cảm ứng điện từ.	<strong>D.</strong> tác dụng hóa học của dòng điện.</p>
 <p class="question"><strong>Câu 3.</strong> Tác dụng nào của dòng điện phụ thuộc vào chiều dòng điện?</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-3-A"><input type="radio" name="mcq-3" id="mcq-3-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">Tác dụng nhiệt</span></label><label class="option" for="mcq-3-B"><input type="radio" name="mcq-3" id="mcq-3-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">Tác dụng từ (lực từ lên nam châm)</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-3" data-answer="B" data-points="0.25" role="radiogroup"><label class="option" for="mcq-3-A"><input type="radio" name="mcq-3" id="mcq-3-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">Tác dụng nhiệt</span></label><label class="option" for="mcq-3-B"><input type="radio" name="mcq-3" id="mcq-3-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">Tác dụng từ (lực từ lên nam châm)</span></label></div>
 <p><strong>C.</strong> Tác dụng phát sáng	<strong>D.</strong> Tác dụng sinh lí</p>
 <p class="question"><strong>Câu 4.</strong> Một vật khối lượng 4 kg trượt từ đỉnh một mặt phẳng nghiêng cao 1,5 m, đến chân dốc có tốc độ 5 m/s. Lấy P = 10m. Nhiệt lượng tỏa ra do ma sát là</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-4-A"><input type="radio" name="mcq-4" id="mcq-4-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">60 J</span></label><label class="option" for="mcq-4-B"><input type="radio" name="mcq-4" id="mcq-4-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">50 J</span></label><label class="option" for="mcq-4-C"><input type="radio" name="mcq-4" id="mcq-4-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">110 J</span></label><label class="option" for="mcq-4-D"><input type="radio" name="mcq-4" id="mcq-4-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">10 J</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-4" data-answer="D" data-points="0.25" role="radiogroup"><label class="option" for="mcq-4-A"><input type="radio" name="mcq-4" id="mcq-4-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">60 J</span></label><label class="option" for="mcq-4-B"><input type="radio" name="mcq-4" id="mcq-4-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">50 J</span></label><label class="option" for="mcq-4-C"><input type="radio" name="mcq-4" id="mcq-4-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">110 J</span></label><label class="option" for="mcq-4-D"><input type="radio" name="mcq-4" id="mcq-4-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">10 J</span></label></div>
 <p class="question"><strong>Câu 5.</strong> Trong suốt thời gian nước đá đang tan ở áp suất tiêu chuẩn, nhiệt độ của hỗn hợp nước – nước đá</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-5-A"><input type="radio" name="mcq-5" id="mcq-5-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">tăng dần</span></label><label class="option" for="mcq-5-B"><input type="radio" name="mcq-5" id="mcq-5-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">giảm dần</span></label><label class="option" for="mcq-5-C"><input type="radio" name="mcq-5" id="mcq-5-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">không đổi</span></label><label class="option" for="mcq-5-D"><input type="radio" name="mcq-5" id="mcq-5-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">lúc tăng lúc giảm</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-5" data-answer="C" data-points="0.25" role="radiogroup"><label class="option" for="mcq-5-A"><input type="radio" name="mcq-5" id="mcq-5-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">tăng dần</span></label><label class="option" for="mcq-5-B"><input type="radio" name="mcq-5" id="mcq-5-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">giảm dần</span></label><label class="option" for="mcq-5-C"><input type="radio" name="mcq-5" id="mcq-5-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">không đổi</span></label><label class="option" for="mcq-5-D"><input type="radio" name="mcq-5" id="mcq-5-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">lúc tăng lúc giảm</span></label></div>
 <p class="question"><strong>Câu 6.</strong> Một quả bóng rơi từ độ cao 2 m, sau khi chạm đất nảy lên cao 1,5 m. Phần trăm cơ năng bị mất đi là</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-6-A"><input type="radio" name="mcq-6" id="mcq-6-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">75 %</span></label><label class="option" for="mcq-6-B"><input type="radio" name="mcq-6" id="mcq-6-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">25 %</span></label><label class="option" for="mcq-6-C"><input type="radio" name="mcq-6" id="mcq-6-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">50 %</span></label><label class="option" for="mcq-6-D"><input type="radio" name="mcq-6" id="mcq-6-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">33 %</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-6" data-answer="B" data-points="0.25" role="radiogroup"><label class="option" for="mcq-6-A"><input type="radio" name="mcq-6" id="mcq-6-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">75 %</span></label><label class="option" for="mcq-6-B"><input type="radio" name="mcq-6" id="mcq-6-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">25 %</span></label><label class="option" for="mcq-6-C"><input type="radio" name="mcq-6" id="mcq-6-C" value="C" /><span class="opt-key">C.</span><span class="opt-text">50 %</span></label><label class="option" for="mcq-6-D"><input type="radio" name="mcq-6" id="mcq-6-D" value="D" /><span class="opt-key">D.</span><span class="opt-text">33 %</span></label></div>
 <p class="question"><strong>Câu 7.</strong> Kim nam châm đặt gần một dây dẫn thẳng bị lệch khỏi hướng Bắc – Nam khi đóng mạch. Điều đó chứng tỏ</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-7-A"><input type="radio" name="mcq-7" id="mcq-7-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">dây dẫn bị nhiễm từ.</span></label><label class="option" for="mcq-7-B"><input type="radio" name="mcq-7" id="mcq-7-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">dây dẫn nóng lên.</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-7" data-answer="D" data-points="0.25" role="radiogroup"><label class="option" for="mcq-7-A"><input type="radio" name="mcq-7" id="mcq-7-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">dây dẫn bị nhiễm từ.</span></label><label class="option" for="mcq-7-B"><input type="radio" name="mcq-7" id="mcq-7-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">dây dẫn nóng lên.</span></label></div>
 <p><strong>C.</strong> kim nam châm bị hút bởi dây.	<strong>D.</strong> dòng điện có tác dụng từ.</p>
 <p class="question"><strong>Câu 8.</strong> Lực cản của không khí tác dụng lên một vật chuyển động phụ thuộc vào</p>
-<div class="options" role="radiogroup"><label class="option" for="mcq-8-A"><input type="radio" name="mcq-8" id="mcq-8-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">tốc độ và hình dạng của vật.</span></label><label class="option" for="mcq-8-B"><input type="radio" name="mcq-8" id="mcq-8-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">khối lượng của vật.</span></label></div>
+<div class="options grade-item" data-kind="mcq" data-name="mcq-8" data-answer="A" data-points="0.25" role="radiogroup"><label class="option" for="mcq-8-A"><input type="radio" name="mcq-8" id="mcq-8-A" value="A" /><span class="opt-key">A.</span><span class="opt-text">tốc độ và hình dạng của vật.</span></label><label class="option" for="mcq-8-B"><input type="radio" name="mcq-8" id="mcq-8-B" value="B" /><span class="opt-key">B.</span><span class="opt-text">khối lượng của vật.</span></label></div>
 <p><strong>C.</strong> màu sắc của vật.	<strong>D.</strong> nhiệt độ của vật.</p>
 <p class="section"><strong>II. Câu trắc nghiệm đúng sai</strong> <em>(2,0 điểm)</em></p>
 <p><em>Thí sinh trả lời Câu 1 và Câu 2. Trong mỗi ý a), b), c), d) thí sinh chọn đúng hoặc sai.</em></p>
 <p class="question"><strong>Câu 1.</strong> Dùng một nguồn nhiệt có công suất ổn định 1000 W để đun 1 kg nước đá ở −20 °C (coi toàn bộ nhiệt lượng do nguồn cung cấp đều được nước đá/nước hấp thụ). Cho c<sub>đá</sub> = 2100 J/(kg.K), c<sub>nước</sub> = 4200 J/(kg.K), λ = 3,4.10⁵ J/kg, nhiệt hóa hơi L = 2,3.10⁶ J/kg.</p>
-<div class="tf-item"><div class="tf-stem"><strong>a)</strong> Thời gian để nước đá tăng nhiệt độ từ −20 °C đến 0 °C là 42 s.</div><div class="tf-choices" role="radiogroup" aria-label="Ý a"><label class="tf-choice" for="tf-1-a-dung"><input type="radio" name="tf-1-a" id="tf-1-a-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-a-sai"><input type="radio" name="tf-1-a" id="tf-1-a-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>b)</strong> Trong quá trình nóng chảy, nhiệt độ của nước đá tăng đều theo thời gian.</div><div class="tf-choices" role="radiogroup" aria-label="Ý b"><label class="tf-choice" for="tf-1-b-dung"><input type="radio" name="tf-1-b" id="tf-1-b-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-b-sai"><input type="radio" name="tf-1-b" id="tf-1-b-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>c)</strong> Tổng thời gian từ lúc bắt đầu đun đến khi nước bắt đầu sôi là 802 s.</div><div class="tf-choices" role="radiogroup" aria-label="Ý c"><label class="tf-choice" for="tf-1-c-dung"><input type="radio" name="tf-1-c" id="tf-1-c-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-c-sai"><input type="radio" name="tf-1-c" id="tf-1-c-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>d)</strong> Để toàn bộ nước hóa hơi ở 100 °C cần đun thêm khoảng 23 phút.</div><div class="tf-choices" role="radiogroup" aria-label="Ý d"><label class="tf-choice" for="tf-1-d-dung"><input type="radio" name="tf-1-d" id="tf-1-d-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-d-sai"><input type="radio" name="tf-1-d" id="tf-1-d-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-1-a" data-answer="Đúng" data-points="0.25"><div class="tf-stem"><strong>a)</strong> Thời gian để nước đá tăng nhiệt độ từ −20 °C đến 0 °C là 42 s.</div><div class="tf-choices" role="radiogroup" aria-label="Ý a"><label class="tf-choice" for="tf-1-a-dung"><input type="radio" name="tf-1-a" id="tf-1-a-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-a-sai"><input type="radio" name="tf-1-a" id="tf-1-a-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-1-b" data-answer="Sai" data-points="0.25"><div class="tf-stem"><strong>b)</strong> Trong quá trình nóng chảy, nhiệt độ của nước đá tăng đều theo thời gian.</div><div class="tf-choices" role="radiogroup" aria-label="Ý b"><label class="tf-choice" for="tf-1-b-dung"><input type="radio" name="tf-1-b" id="tf-1-b-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-b-sai"><input type="radio" name="tf-1-b" id="tf-1-b-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-1-c" data-answer="Đúng" data-points="0.25"><div class="tf-stem"><strong>c)</strong> Tổng thời gian từ lúc bắt đầu đun đến khi nước bắt đầu sôi là 802 s.</div><div class="tf-choices" role="radiogroup" aria-label="Ý c"><label class="tf-choice" for="tf-1-c-dung"><input type="radio" name="tf-1-c" id="tf-1-c-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-c-sai"><input type="radio" name="tf-1-c" id="tf-1-c-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-1-d" data-answer="Sai" data-points="0.25"><div class="tf-stem"><strong>d)</strong> Để toàn bộ nước hóa hơi ở 100 °C cần đun thêm khoảng 23 phút.</div><div class="tf-choices" role="radiogroup" aria-label="Ý d"><label class="tf-choice" for="tf-1-d-dung"><input type="radio" name="tf-1-d" id="tf-1-d-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-1-d-sai"><input type="radio" name="tf-1-d" id="tf-1-d-sai" value="Sai" /><span>Sai</span></label></div></div>
 <p class="question"><strong>Câu 2.</strong> Một cuộn dây dẫn kín được nối với một điện kế nhạy. Đưa một thanh nam châm thẳng lại gần hoặc ra xa cuộn dây.</p>
-<div class="tf-item"><div class="tf-stem"><strong>a)</strong> Khi đưa nam châm lại gần cuộn dây, kim điện kế bị lệch.</div><div class="tf-choices" role="radiogroup" aria-label="Ý a"><label class="tf-choice" for="tf-2-a-dung"><input type="radio" name="tf-2-a" id="tf-2-a-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-a-sai"><input type="radio" name="tf-2-a" id="tf-2-a-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>b)</strong> Khi nam châm đứng yên trong lòng cuộn dây, kim điện kế vẫn lệch.</div><div class="tf-choices" role="radiogroup" aria-label="Ý b"><label class="tf-choice" for="tf-2-b-dung"><input type="radio" name="tf-2-b" id="tf-2-b-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-b-sai"><input type="radio" name="tf-2-b" id="tf-2-b-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>c)</strong> Khi kéo nam châm ra xa, kim điện kế lệch ngược chiều so với khi đưa lại gần.</div><div class="tf-choices" role="radiogroup" aria-label="Ý c"><label class="tf-choice" for="tf-2-c-dung"><input type="radio" name="tf-2-c" id="tf-2-c-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-c-sai"><input type="radio" name="tf-2-c" id="tf-2-c-sai" value="Sai" /><span>Sai</span></label></div></div>
-<div class="tf-item"><div class="tf-stem"><strong>d)</strong> Đưa nam châm lại gần càng nhanh thì kim điện kế lệch càng ít.</div><div class="tf-choices" role="radiogroup" aria-label="Ý d"><label class="tf-choice" for="tf-2-d-dung"><input type="radio" name="tf-2-d" id="tf-2-d-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-d-sai"><input type="radio" name="tf-2-d" id="tf-2-d-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-2-a" data-answer="Đúng" data-points="0.25"><div class="tf-stem"><strong>a)</strong> Khi đưa nam châm lại gần cuộn dây, kim điện kế bị lệch.</div><div class="tf-choices" role="radiogroup" aria-label="Ý a"><label class="tf-choice" for="tf-2-a-dung"><input type="radio" name="tf-2-a" id="tf-2-a-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-a-sai"><input type="radio" name="tf-2-a" id="tf-2-a-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-2-b" data-answer="Sai" data-points="0.25"><div class="tf-stem"><strong>b)</strong> Khi nam châm đứng yên trong lòng cuộn dây, kim điện kế vẫn lệch.</div><div class="tf-choices" role="radiogroup" aria-label="Ý b"><label class="tf-choice" for="tf-2-b-dung"><input type="radio" name="tf-2-b" id="tf-2-b-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-b-sai"><input type="radio" name="tf-2-b" id="tf-2-b-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-2-c" data-answer="Đúng" data-points="0.25"><div class="tf-stem"><strong>c)</strong> Khi kéo nam châm ra xa, kim điện kế lệch ngược chiều so với khi đưa lại gần.</div><div class="tf-choices" role="radiogroup" aria-label="Ý c"><label class="tf-choice" for="tf-2-c-dung"><input type="radio" name="tf-2-c" id="tf-2-c-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-c-sai"><input type="radio" name="tf-2-c" id="tf-2-c-sai" value="Sai" /><span>Sai</span></label></div></div>
+<div class="tf-item grade-item" data-kind="tf" data-name="tf-2-d" data-answer="Sai" data-points="0.25"><div class="tf-stem"><strong>d)</strong> Đưa nam châm lại gần càng nhanh thì kim điện kế lệch càng ít.</div><div class="tf-choices" role="radiogroup" aria-label="Ý d"><label class="tf-choice" for="tf-2-d-dung"><input type="radio" name="tf-2-d" id="tf-2-d-dung" value="Đúng" /><span>Đúng</span></label><label class="tf-choice" for="tf-2-d-sai"><input type="radio" name="tf-2-d" id="tf-2-d-sai" value="Sai" /><span>Sai</span></label></div></div>
 <p class="section"><strong>III. Câu trắc nghiệm trả lời ngắn</strong> <em>(2,0 điểm)</em></p>
 <p><em>Thí sinh trả lời từ Câu 1 đến Câu 4.</em></p>
 <p class="question"><strong>Câu 1.</strong> Kéo đều vật 5 kg lên một mặt phẳng nghiêng dài 4 m, cao 1 m bằng lực song song mặt phẳng nghiêng. Lực ma sát là 5 N, lấy P = 10m. Lực kéo bằng bao nhiêu N?</p>
+<div class="short-wrap grade-item" data-kind="short" data-name="short-1" data-answer="17,5" data-points="0.5"><label class="short-label">Đáp án Câu 1: <input type="text" class="short-input" name="short-1" autocomplete="off" /></label></div>
 <p class="question"><strong>Câu 2.</strong> Nhiệt lượng cần cung cấp để 2 kg nước đá ở 0 °C nóng chảy hoàn toàn bằng bao nhiêu kJ? (λ = 3,4.10⁵ J/kg)</p>
+<div class="short-wrap grade-item" data-kind="short" data-name="short-2" data-answer="680" data-points="0.5"><label class="short-label">Đáp án Câu 2: <input type="text" class="short-input" name="short-2" autocomplete="off" /></label></div>
 <p class="question"><strong>Câu 3.</strong> Một vật được thả rơi từ độ cao 20 m, bỏ qua sức cản không khí, lấy P = 10m. Tốc độ của vật khi chạm đất bằng bao nhiêu m/s?</p>
+<div class="short-wrap grade-item" data-kind="short" data-name="short-3" data-answer="20" data-points="0.5"><label class="short-label">Đáp án Câu 3: <input type="text" class="short-input" name="short-3" autocomplete="off" /></label></div>
 <p class="question"><strong>Câu 4.</strong> Búa máy khối lượng 200 kg rơi từ độ cao 5 m xuống đầu cọc làm cọc lún sâu 10 cm. Coi toàn bộ thế năng của búa ở độ cao 5 m dùng để thắng lực cản của đất (bỏ qua độ lún so với độ cao rơi), lấy P = 10m. Lực cản trung bình của đất bằng bao nhiêu N?</p>
+<div class="short-wrap grade-item" data-kind="short" data-name="short-4" data-answer="100000" data-points="0.5"><label class="short-label">Đáp án Câu 4: <input type="text" class="short-input" name="short-4" autocomplete="off" /></label></div>
 <p class="section"><strong>PHẦN B. PHẦN TỰ LUẬN</strong> <em>(14,0 điểm)</em></p>
 <p><em>Thí sinh làm bài từ Câu I đến Câu VI.</em></p>
 <p class="question"><strong>Câu I. (2,0 điểm)</strong></p>
@@ -106,33 +165,198 @@ h1 { font-size: 20px; margin: 0 0 8px; color: #0b1f3a; }
 <p>1. Bỏ qua ma sát và lực cản. Tính tốc độ của xe tại B và tại C.</p>
 <p>2. Thực tế xe đến C với tốc độ 15 m/s. Tính phần cơ năng đã chuyển hóa thành nhiệt năng và tỉ lệ phần trăm so với cơ năng ban đầu.</p>
 <p>3. Biết chiều dài đường ray từ A đến C là 150 m. Tính độ lớn lực cản trung bình tác dụng lên xe.</p>
+<div class="answer-panel" data-cau="I"><p class="answer-panel-title">Trả lời Câu I (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-6-I" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="question"><strong>Câu II. (2,0 điểm)</strong></p>
 <p>Cho c<sub>đá</sub> = 2100 J/(kg.K), c<sub>nước</sub> = 4200 J/(kg.K), c<sub>nhôm</sub> = 880 J/(kg.K), λ = 3,4.10⁵ J/kg, L = 2,3.10⁶ J/kg.</p>
 <p>1. Tính nhiệt lượng cần thiết để biến 200 g nước đá ở −10 °C hoàn toàn thành hơi nước ở 100 °C.</p>
 <p>2. Bỏ thỏi nước đá 200 g ở −10 °C vào một xô nhôm khối lượng 100 g chứa nước ở 20 °C. Khi cân bằng nhiệt, trong xô còn lại 50 g nước đá chưa tan. Bỏ qua trao đổi nhiệt với môi trường. Tính khối lượng nước có trong xô lúc đầu.</p>
+<div class="answer-panel" data-cau="II"><p class="answer-panel-title">Trả lời Câu II (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-6-II" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="question"><strong>Câu III. (2,0 điểm)</strong></p>
 <p>Một lăng kính có tiết diện thẳng là tam giác đều ABC (góc chiết quang A = 60°), làm bằng thủy tinh có chiết suất n = √2, đặt trong không khí. Chiếu một tia sáng đơn sắc nằm trong mặt phẳng tiết diện tới mặt bên AB với góc tới i₁. Biết tại mỗi mặt: sin(góc trong không khí) = n.sin(góc trong thủy tinh), và tổng hai góc khúc xạ – tới bên trong lăng kính r₁ + r₂ = A.</p>
 <p>1. Với i₁ = 45°, tính góc ló i₂ ở mặt AC và góc lệch giữa tia ló và tia tới (D = i₁ + i₂ − A).</p>
 <p>2. Tìm giá trị nhỏ nhất của góc tới i₁ để có tia ló ra khỏi mặt AC.</p>
+<div class="answer-panel" data-cau="III"><p class="answer-panel-title">Trả lời Câu III (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-6-III" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="question"><strong>Câu IV. (2,0 điểm)</strong></p>
 <p>Một người dùng chiếc xà beng thẳng, dài 1,5 m để bẩy một hòn đá có khối lượng 120 kg. Điểm tựa O cách đầu xà beng đặt dưới hòn đá 30 cm. Coi lực hòn đá tác dụng lên đầu xà beng bằng trọng lượng của nó và vuông góc với xà beng. Lấy P = 10m.</p>
 <p>1. Bỏ qua khối lượng xà beng. Tính lực tối thiểu người phải tác dụng vào đầu kia của xà beng theo phương vuông góc với xà beng.</p>
 <p>2. Nếu người tác dụng lực vào đầu xà beng theo phương hợp với xà beng góc 60° thì lực phải bằng bao nhiêu?</p>
 <p>3. Xà beng đồng chất, khối lượng 3 kg. Tính lại lực ở câu 1.</p>
+<div class="answer-panel" data-cau="IV"><p class="answer-panel-title">Trả lời Câu IV (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-6-IV" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="question"><strong>Câu V. (3,0 điểm)</strong></p>
 <p>Một ấm điện có hai dây điện trở R₁ và R₂. Nếu chỉ dùng R₁ thì nước trong ấm sôi sau t₁ = 10 phút; nếu chỉ dùng R₂ thì nước sôi sau t₂ = 15 phút. Hiệu điện thế nguồn không đổi U = 220 V; bỏ qua nhiệt lượng hao phí và sự thay đổi điện trở theo nhiệt độ. Lượng nước ban đầu như nhau trong các lần đun.</p>
 <p>1. Nếu dùng hai dây mắc nối tiếp thì sau bao lâu nước sôi?</p>
 <p>2. Nếu dùng hai dây mắc song song thì sau bao lâu nước sôi?</p>
 <p>3. Biết ấm đun 1,5 lít nước từ 20 °C (c = 4200 J/(kg.K)). Tính R₁, R₂.</p>
 <p>4. Nếu hiệu điện thế giảm 10 % và chỉ dùng R₁ thì thời gian đun sôi lượng nước trên là bao nhiêu?</p>
+<div class="answer-panel" data-cau="V"><p class="answer-panel-title">Trả lời Câu V (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-6-V" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="question"><strong>Câu VI. (3,0 điểm)</strong></p>
 <p>Hai địa điểm M và N cách nhau 140 km. Lúc 7 h, xe A xuất phát từ M đi về N với tốc độ 40 km/h. Lúc 8 h, xe B xuất phát từ N đi về M với tốc độ 60 km/h. Sau khi gặp xe B, xe A dừng lại nghỉ 30 phút rồi tiếp tục đi về N với tốc độ cũ.</p>
 <p>1. Xác định thời điểm và vị trí hai xe gặp nhau.</p>
 <p>2. Xe nào đến đích trước? Lúc mấy giờ mỗi xe đến đích?</p>
 <p>3. Tìm các thời điểm hai xe cách nhau 50 km.</p>
 <p>4. Vẽ đồ thị vị trí – thời gian của hai xe trên cùng một hệ trục (gốc tọa độ tại M, gốc thời gian lúc 7 h).</p>
+<div class="answer-panel" data-cau="VI"><p class="answer-panel-title">Trả lời Câu VI (không chấm tự động)</p><textarea class="essay-textarea" name="essay-free-6-VI" rows="5" placeholder="Nhập bài làm của em..."></textarea></div>
 <p class="end">-------------------- HẾT --------------------</p>
 <p><br/></p>
+<div class="submit-bar"><button type="button" id="submit-btn">Nộp bài &amp; chấm điểm</button><div id="score-box" hidden></div></div>
 </div>
+<script>
+
+(function () {
+  var locked = false;
+  function norm(v) {
+    return String(v == null ? "" : v)
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/,/g, ".");
+  }
+  function selectedValue(name) {
+    var el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : "";
+  }
+  function setFieldValue(name, kind, value) {
+    if (kind === "mcq" || kind === "tf" || kind === "essay-radio") {
+      var radios = document.querySelectorAll('input[type=radio][name="' + name + '"]');
+      radios.forEach(function (inp) {
+        inp.checked = norm(inp.value) === norm(value);
+      });
+      return;
+    }
+    var input = document.querySelector('input[type=text][name="' + name + '"]');
+    if (input) input.value = value == null ? "" : String(value);
+  }
+  function highlightCorrectChoice(item, answer) {
+    var inputs = item.querySelectorAll("input[type=radio]");
+    inputs.forEach(function (inp) {
+      var lab = inp.closest("label");
+      if (!lab) return;
+      lab.classList.remove("is-key");
+      if (norm(inp.value) === norm(answer)) lab.classList.add("is-key");
+    });
+  }
+  function markItem(item, ok) {
+    item.classList.remove("is-correct", "is-wrong");
+    item.classList.add(ok ? "is-correct" : "is-wrong");
+    var old = item.querySelector(".grade-feedback");
+    if (old) old.remove();
+    var ans = item.getAttribute("data-answer") || "";
+    var kind = item.getAttribute("data-kind");
+    if (kind === "mcq" || kind === "tf" || kind === "essay-radio") {
+      highlightCorrectChoice(item, ans);
+    }
+    var fb = document.createElement("span");
+    fb.className = "grade-feedback";
+    if (ok) {
+      fb.textContent = "Đúng";
+    } else {
+      fb.innerHTML = 'Sai — đáp án: <strong class="correct-ans"></strong>';
+      fb.querySelector(".correct-ans").textContent = ans;
+    }
+    item.appendChild(fb);
+  }
+  function lockInputs() {
+    document.querySelectorAll(".grade-item input, .essay-textarea").forEach(function (inp) {
+      inp.disabled = true;
+    });
+    var btn = document.getElementById("submit-btn");
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Đã nộp bài";
+    }
+  }
+  function showScore(earned, total, note) {
+    var box = document.getElementById("score-box");
+    if (!box) return;
+    box.hidden = false;
+    box.innerHTML =
+      "<strong>Điểm: " +
+      Number(earned).toFixed(2).replace(".", ",") +
+      " / " +
+      Number(total).toFixed(2).replace(".", ",") +
+      "</strong>" +
+      '<span class="score-note"> ' +
+      (note || "(đúng: xanh · sai: đỏ, kèm đáp án đúng)") +
+      "</span>";
+  }
+  function restoreResult(payload) {
+    if (!payload || !payload.items) return;
+    locked = true;
+    payload.items.forEach(function (row) {
+      setFieldValue(row.name, row.kind, row.userAnswer);
+      var item = document.querySelector('.grade-item[data-name="' + row.name + '"]');
+      if (item) markItem(item, !!row.correct);
+    });
+    lockInputs();
+    showScore(payload.score, payload.maxScore, "(xem lại bài đã nộp — không làm lại)");
+  }
+  function grade() {
+    if (locked) return;
+    var total = 0;
+    var earned = 0;
+    var details = [];
+    var items = document.querySelectorAll(".grade-item[data-answer]");
+    items.forEach(function (item) {
+      var pts = parseFloat(item.getAttribute("data-points") || "0") || 0;
+      total += pts;
+      var kind = item.getAttribute("data-kind");
+      var name = item.getAttribute("data-name");
+      var answer = item.getAttribute("data-answer") || "";
+      var user = "";
+      if (kind === "mcq" || kind === "tf" || kind === "essay-radio") {
+        user = selectedValue(name);
+      } else {
+        var input = item.querySelector("input[type=text]");
+        user = input ? input.value : "";
+      }
+      var ok = norm(user) !== "" && norm(user) === norm(answer);
+      var got = ok ? pts : 0;
+      if (ok) earned += pts;
+      details.push({
+        name: name || "",
+        kind: kind || "",
+        userAnswer: user,
+        correctAnswer: answer,
+        correct: ok,
+        points: pts,
+        earned: got,
+      });
+      markItem(item, ok);
+    });
+    locked = true;
+    lockInputs();
+    showScore(earned, total, "(đúng: xanh · sai: đỏ, kèm đáp án đúng)");
+    try {
+      var examNum = parseInt(document.body.getAttribute("data-exam-num") || "0", 10);
+      var examTitle = document.body.getAttribute("data-exam-title") || ("Đề số " + examNum);
+      window.parent.postMessage(
+        {
+          type: "practice-result",
+          payload: {
+            examNum: examNum,
+            examTitle: examTitle,
+            score: Math.round(earned * 100) / 100,
+            maxScore: Math.round(total * 100) / 100,
+            items: details,
+          },
+        },
+        window.location.origin
+      );
+    } catch (e) {}
+  }
+  window.addEventListener("message", function (event) {
+    if (event.origin !== window.location.origin) return;
+    var data = event.data;
+    if (!data || data.type !== "practice-restore") return;
+    restoreResult(data.payload);
+  });
+  try {
+    window.parent.postMessage({ type: "practice-ready" }, window.location.origin);
+  } catch (e) {}
+  var btn = document.getElementById("submit-btn");
+  if (btn) btn.addEventListener("click", grade);
+})();
+
+</script>
 </body>
 </html>

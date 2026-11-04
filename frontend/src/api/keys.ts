@@ -11,4 +11,17 @@ export const userKeys = {
   list: (params: ListUsersParams) => [...userKeys.lists(), params] as const,
   detail: (id: string) => [...userKeys.all, "detail", id] as const,
   activity: (id: string) => [...userKeys.all, "activity", id] as const,
+  practiceResults: (id: string) =>
+    [...userKeys.all, "practice-results", id] as const,
+  practiceResult: (userId: string, resultId: string) =>
+    [...userKeys.all, "practice-results", userId, resultId] as const,
+};
+
+export const practiceResultKeys = {
+  all: ["practice-results"] as const,
+  lists: () => [...practiceResultKeys.all, "list"] as const,
+  list: () => [...practiceResultKeys.lists()] as const,
+  detail: (id: string) => [...practiceResultKeys.all, "detail", id] as const,
+  byExam: (examNum: number) =>
+    [...practiceResultKeys.all, "exam", examNum] as const,
 };

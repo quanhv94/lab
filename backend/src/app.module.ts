@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ActivityModule } from './activity/activity.module';
 import { AuthModule } from './auth/auth.module';
+import { PracticeResultsModule } from './practice-results/practice-results.module';
 import { UsersModule } from './users/users.module';
 
 @Controller('health')
@@ -32,6 +33,7 @@ class HealthController {
     UsersModule,
     AuthModule,
     ActivityModule,
+    PracticeResultsModule,
   ],
   controllers: [HealthController],
 })

@@ -8,6 +8,7 @@ export type PracticeExam = {
   subject: string;
   focus: string;
   duration: string;
+  hasEssayKey?: boolean;
 };
 
 export const PRACTICE_EXAMS = manifest.exams as PracticeExam[];

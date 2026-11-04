@@ -10,6 +10,7 @@ import { ActivityLog } from '../activity/activity-log.schema';
 import { ADMIN_USERNAME } from '../auth/admin.constants';
 import { RefreshToken } from '../auth/refresh-token.schema';
 import { DEFAULT_USER_ROLE } from '../common/roles';
+import { PracticeResult } from '../practice-results/practice-result.schema';
 import {
   CreateUserDto,
   ListUsersQueryDto,
@@ -27,6 +28,8 @@ export class UsersService {
     private readonly refreshTokenModel: Model<RefreshToken>,
     @InjectModel(ActivityLog.name)
     private readonly activityModel: Model<ActivityLog>,
+    @InjectModel(PracticeResult.name)
+    private readonly practiceResultModel: Model<PracticeResult>,
   ) {}
 
   async create(dto: CreateUserDto): Promise<UserDocument> {
@@ -100,6 +103,7 @@ export class UsersService {
       user.deleteOne(),
       this.refreshTokenModel.deleteMany({ userId: id }),
       this.activityModel.deleteMany({ userId: id }),
+      this.practiceResultModel.deleteMany({ userId: id }),
     ]);
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type RefObject } from "react";
 import AutoHeightIframe from "@/components/student/AutoHeightIframe";
 
 function embedSrc(url: string) {
@@ -12,10 +12,14 @@ export default function HsgExerciseView({
   exerciseSrc,
   exerciseTitle,
   simEmbedUrl,
+  iframeRef,
+  onIframeLoad,
 }: {
   exerciseSrc: string;
   exerciseTitle: string;
   simEmbedUrl?: string;
+  iframeRef?: RefObject<HTMLIFrameElement | null>;
+  onIframeLoad?: () => void;
 }) {
   const [showSim, setShowSim] = useState(false);
 
@@ -27,6 +31,8 @@ export default function HsgExerciseView({
           title={exerciseTitle}
           showFullscreen={false}
           fill
+          iframeRef={iframeRef}
+          onLoad={onIframeLoad}
         />
       </div>
     );

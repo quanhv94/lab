@@ -78,6 +78,37 @@ export interface ActivityEntry {
   visitedAt: string;
 }
 
+export interface PracticeAnswerItem {
+  name: string;
+  kind: string;
+  userAnswer: string;
+  correctAnswer: string;
+  correct: boolean;
+  points: number;
+  earned: number;
+}
+
+export interface PracticeResultSummary {
+  id: string;
+  examNum: number;
+  examTitle: string;
+  score: number;
+  maxScore: number;
+  submittedAt: string;
+}
+
+export interface PracticeResult extends PracticeResultSummary {
+  items: PracticeAnswerItem[];
+}
+
+export interface CreatePracticeResultPayload {
+  examNum: number;
+  examTitle: string;
+  score: number;
+  maxScore: number;
+  items: PracticeAnswerItem[];
+}
+
 export interface UpdateUserPayload {
   password?: string;
   fullName?: string;
