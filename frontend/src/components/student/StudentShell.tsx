@@ -1,36 +1,22 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useState, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { Role } from "@/api";
 import { Loading } from "@/components/ui";
 import { useAuth, useRequireAuth } from "@/lib/auth";
+import StudentNav, { StudentNavFallback } from "./StudentNav";
 import {
   AtomIcon,
   BellIcon,
-  BookIcon,
-  ChartIcon,
-  ClipboardIcon,
   CloseIcon,
-  FlaskIcon,
-  HomeIcon,
   MenuIcon,
   SettingsIcon,
 } from "./icons";
 
-const NAV = [
-  { href: "/", label: "Trang chủ", icon: HomeIcon },
-  { href: "/experiments", label: "Thí nghiệm", icon: FlaskIcon },
-  { href: "/exercises", label: "Bài tập HSG", icon: BookIcon },
-  { href: "/practice", label: "Đề luyện", icon: ClipboardIcon },
-  { href: "/results", label: "Kết quả", icon: ChartIcon },
-] as const;
-
 export default function StudentShell({ children }: { children: ReactNode }) {
   const { allowed, user } = useRequireAuth();
   const { logout } = useAuth();
-  const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
@@ -42,6 +28,7 @@ export default function StudentShell({ children }: { children: ReactNode }) {
   // instant navigation for the (student) segment (do not early-return without it).
   const gated = !allowed || !user || user.role === Role.Admin;
   const displayName = user?.fullName || user?.username || "";
+  const closeNav = () => setOpen(false);
 
   return (
     <>
@@ -50,7 +37,6 @@ export default function StudentShell({ children }: { children: ReactNode }) {
         className={`flex min-h-screen bg-[#eef3f9] text-[#0f172a] ${gated ? "hidden" : ""}`}
         aria-hidden={gated || undefined}
       >
-        {/* Mobile overlay */}
         {open && (
           <button
             className="fixed inset-0 z-30 bg-black/40 lg:hidden"
@@ -80,45 +66,9 @@ export default function StudentShell({ children }: { children: ReactNode }) {
             </button>
           </div>
 
-          <nav className="flex flex-1 flex-col gap-1 px-3 pb-4">
-            {NAV.map((item) => {
-              const active =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                    active
-                      ? "bg-[#3b82f6] text-white shadow-md shadow-blue-900/30"
-                      : "text-slate-300 hover:bg-white/5 hover:text-white"
-                  }`}
-                >
-                  <Icon />
-                  {item.label}
-                </Link>
-              );
-            })}
-
-            <div className="mt-auto pt-4">
-              <Link
-                href="/settings"
-                onClick={() => setOpen(false)}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                  pathname.startsWith("/settings")
-                    ? "bg-[#3b82f6] text-white"
-                    : "text-slate-300 hover:bg-white/5 hover:text-white"
-                }`}
-              >
-                <SettingsIcon />
-                Cài đặt
-              </Link>
-            </div>
-          </nav>
+          <Suspense fallback={<StudentNavFallback onNavigate={closeNav} />}>
+            <StudentNav onNavigate={closeNav} />
+          </Suspense>
         </aside>
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col lg:pl-64">

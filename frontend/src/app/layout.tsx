@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Be_Vietnam_Pro, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import ActivityTracker from "@/components/ActivityTracker";
 import ApiWakeGate from "@/components/ApiWakeGate";
 import { AuthProvider } from "@/lib/auth";
@@ -32,7 +33,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <QueryProvider>
           <ApiWakeGate>
             <AuthProvider>
-              <ActivityTracker />
+              <Suspense fallback={null}>
+                <ActivityTracker />
+              </Suspense>
               {children}
             </AuthProvider>
           </ApiWakeGate>
