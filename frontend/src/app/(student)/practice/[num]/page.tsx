@@ -1,6 +1,8 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PracticeExamClient from "@/components/student/PracticeExamClient";
+import { Loading } from "@/components/ui";
 import {
   PRACTICE_EXAMS,
   getPracticeExam,
@@ -11,7 +13,7 @@ export function generateStaticParams() {
   return PRACTICE_EXAMS.map((e) => ({ num: String(e.num) }));
 }
 
-export default async function PracticeExamPage({
+async function PracticeExamContent({
   params,
 }: {
   params: Promise<{ num: string }>;
@@ -48,5 +50,17 @@ export default async function PracticeExamPage({
         hasEssayKey={!!exam.hasEssayKey}
       />
     </div>
+  );
+}
+
+export default function PracticeExamPage({
+  params,
+}: {
+  params: Promise<{ num: string }>;
+}) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <PracticeExamContent params={params} />
+    </Suspense>
   );
 }

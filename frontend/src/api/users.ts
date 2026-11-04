@@ -54,6 +54,13 @@ export function getUserPracticeResult(userId: string, resultId: string) {
   );
 }
 
+export function resetUserPracticeResults(userId: string) {
+  return request<{ deletedCount: number }>(
+    `/admin/users/${userId}/practice-results`,
+    { method: "DELETE" },
+  );
+}
+
 export function recordActivity(path: string, title: string) {
   return request<ActivityEntry>("/activity", {
     method: "POST",

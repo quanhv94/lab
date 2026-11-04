@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles, RolesGuard } from '../auth/roles.guard';
 import { Role } from '../common/roles';
@@ -18,5 +18,11 @@ export class AdminPracticeResultsController {
   @Get(':id/practice-results/:resultId')
   getOne(@Param('id') id: string, @Param('resultId') resultId: string) {
     return this.resultsService.getForUser(id, resultId);
+  }
+
+  @Delete(':id/practice-results')
+  async reset(@Param('id') id: string) {
+    const result = await this.resultsService.deleteForUser(id);
+    return { deletedCount: result.deletedCount ?? 0 };
   }
 }

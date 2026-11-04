@@ -1,10 +1,11 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import {
   getUserPracticeResult,
   listUserPracticeResults,
+  resetUserPracticeResults,
   userKeys,
   type User,
 } from "@/api";
@@ -43,6 +44,7 @@ export default function PracticeResultsModal({
   user: User;
   onClose: () => void;
 }) {
+  const queryClient = useQueryClient();
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const listQuery = useQuery({
@@ -56,6 +58,19 @@ export default function PracticeResultsModal({
     enabled: !!selectedId,
   });
 
+  const resetMutation = useMutation({
+    mutationFn: () => resetUserPracticeResults(user.id),
+    onSuccess: async () => {
+      setSelectedId(null);
+      await queryClient.invalidateQueries({
+        queryKey: userKeys.practiceResults(user.id),
+      });
+    },
+  });
+
+  const hasResults = (listQuery.data?.length ?? 0) > 0;
+  const displayName = user.fullName || user.username;
+
   return (
     <div className="fixed inset-0 z-20 flex items-center justify-center bg-black/40 p-4">
       <div className="flex max-h-[90vh] w-full max-w-5xl flex-col rounded-xl bg-white p-6 shadow-xl">
@@ -63,11 +78,29 @@ export default function PracticeResultsModal({
           <div>
             <h2 className="text-lg font-semibold">Kết quả đề luyện</h2>
             <p className="text-sm text-slate-500">
-              {user.fullName || user.username}
+              {displayName}
               {selectedId ? " · Chi tiết một lần nộp" : " · Tổng quan theo đề"}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
+            {hasResults && !selectedId && (
+              <Button
+                variant="danger"
+                className="px-3 py-1"
+                disabled={resetMutation.isPending}
+                onClick={() => {
+                  if (
+                    confirm(
+                      `Xóa hết kết quả đề luyện của "${displayName}"?\nHọc sinh sẽ làm lại từ Đề số 1.`,
+                    )
+                  ) {
+                    resetMutation.mutate();
+                  }
+                }}
+              >
+                {resetMutation.isPending ? "Đang xóa…" : "Reset kết quả"}
+              </Button>
+            )}
             {selectedId && (
               <Button
                 variant="secondary"
@@ -85,7 +118,8 @@ export default function PracticeResultsModal({
 
         <Alert>
           {(listQuery.error as Error | null)?.message ||
-            (detailQuery.error as Error | null)?.message}
+            (detailQuery.error as Error | null)?.message ||
+            (resetMutation.error as Error | null)?.message}
         </Alert>
 
         <div className="min-h-0 flex-1 overflow-auto">
