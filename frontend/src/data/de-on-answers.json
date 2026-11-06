@@ -193,7 +193,7 @@
       ],
       "III": [
         {
-          "text": "2. IH₁ = [7.5] cm.",
+          "text": "2. IH₁ = [10] cm.",
           "points": 0.75,
           "segments": [
             {
@@ -213,13 +213,13 @@
             {
               "id": "f0",
               "kind": "fill",
-              "answer": "7.5",
+              "answer": "10",
               "points": 0.75
             }
           ]
         },
         {
-          "text": "JH₂ = [37.5] cm.",
+          "text": "JH₂ = [50] cm.",
           "points": 0.75,
           "segments": [
             {
@@ -239,13 +239,13 @@
             {
               "id": "f0",
               "kind": "fill",
-              "answer": "37.5",
+              "answer": "50",
               "points": 0.75
             }
           ]
         },
         {
-          "text": "SM = [100] cm.",
+          "text": "SM = [84,9] cm. Làm tròn đến hàng phần chục",
           "points": 0.5,
           "segments": [
             {
@@ -258,14 +258,14 @@
             },
             {
               "type": "text",
-              "text": " cm."
+              "text": " cm. Làm tròn đến hàng phần chục"
             }
           ],
           "fields": [
             {
               "id": "f0",
               "kind": "fill",
-              "answer": "100",
+              "answer": "84,9",
               "points": 0.5
             }
           ]
@@ -335,7 +335,11 @@
             {
               "type": "radio",
               "fieldId": "f0",
-              "options": ["dâng lên", "hạ xuống", "giữ nguyên"]
+              "options": [
+                "dâng lên",
+                "hạ xuống",
+                "giữ nguyên"
+              ]
             }
           ],
           "fields": [
@@ -343,7 +347,11 @@
               "id": "f0",
               "kind": "radio",
               "answer": "dâng lên",
-              "options": ["dâng lên", "hạ xuống", "giữ nguyên"],
+              "options": [
+                "dâng lên",
+                "hạ xuống",
+                "giữ nguyên"
+              ],
               "points": 0.25
             }
           ]
@@ -517,7 +525,10 @@
             {
               "type": "radio",
               "fieldId": "f0",
-              "options": ["Có", "Không"]
+              "options": [
+                "Có",
+                "Không"
+              ]
             }
           ],
           "fields": [
@@ -525,7 +536,10 @@
               "id": "f0",
               "kind": "radio",
               "answer": "Có",
-              "options": ["Có", "Không"],
+              "options": [
+                "Có",
+                "Không"
+              ],
               "points": 0.5
             }
           ]
@@ -752,7 +766,10 @@
             {
               "type": "radio",
               "fieldId": "f0",
-              "options": ["Có", "Không"]
+              "options": [
+                "Có",
+                "Không"
+              ]
             }
           ],
           "fields": [
@@ -760,7 +777,10 @@
               "id": "f0",
               "kind": "radio",
               "answer": "Có",
-              "options": ["Có", "Không"],
+              "options": [
+                "Có",
+                "Không"
+              ],
               "points": 0.5
             }
           ]
