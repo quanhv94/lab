@@ -28,7 +28,7 @@
       "subject": "Môn: KHOA HỌC TỰ NHIÊN",
       "focus": "Chủ đề trọng tâm: Cảm ứng điện từ – Máy biến áp – Âm – Đồ thị chuyển động – Năng lượng gió",
       "duration": "Thời gian làm bài: 150 phút",
-      "hasEssayKey": false
+      "hasEssayKey": true
     },
     {
       "num": 4,
@@ -38,7 +38,7 @@
       "subject": "Môn: KHOA HỌC TỰ NHIÊN",
       "focus": "Chủ đề trọng tâm: Nhiên liệu – Động cơ – Ròng rọc – Thấu kính phân kì – Đòn bẩy – Biến trở – Thang cuốn",
       "duration": "Thời gian làm bài: 150 phút",
-      "hasEssayKey": false
+      "hasEssayKey": true
     },
     {
       "num": 5,
@@ -48,7 +48,7 @@
       "subject": "Môn: KHOA HỌC TỰ NHIÊN",
       "focus": "Chủ đề trọng tâm: Trái Đất – Bầu trời – Khối lượng riêng hợp kim – Nhiệt lượng kế – Khúc xạ – Vôn kế thực",
       "duration": "Thời gian làm bài: 150 phút",
-      "hasEssayKey": false
+      "hasEssayKey": true
     },
     {
       "num": 6,
@@ -58,7 +58,7 @@
       "subject": "Môn: KHOA HỌC TỰ NHIÊN",
       "focus": "Chủ đề trọng tâm: Từ trường – Cảm ứng điện từ – Chuyển thể – Cơ năng – Lăng kính – Đòn bẩy – Đồ thị chuyển động",
       "duration": "Thời gian làm bài: 150 phút",
-      "hasEssayKey": false
+      "hasEssayKey": true
     },
     {
       "num": 7,
@@ -68,7 +68,7 @@
       "subject": "Môn: KHOA HỌC TỰ NHIÊN",
       "focus": "Chủ đề trọng tâm: Áp suất chất lỏng – khí quyển – Mạch điện hỗn hợp – Hai gương phẳng – Nhiệt điện – Xe buýt",
       "duration": "Thời gian làm bài: 150 phút",
-      "hasEssayKey": false
+      "hasEssayKey": true
     },
     {
       "num": 8,
@@ -78,7 +78,7 @@
       "subject": "Môn: KHOA HỌC TỰ NHIÊN",
       "focus": "Chủ đề trọng tâm: Truyền nhiệt – Cân bằng nhiệt có hao phí – Kính lúp – Vật ở mặt phân cách – Công suất cực đại",
       "duration": "Thời gian làm bài: 150 phút",
-      "hasEssayKey": false
+      "hasEssayKey": true
     },
     {
       "num": 9,
@@ -88,7 +88,7 @@
       "subject": "Môn: KHOA HỌC TỰ NHIÊN",
       "focus": "Chủ đề trọng tâm: Âm học – Bóng tối, nửa tối – Tiết kiệm điện – Nước đá có lõi chì – Gương phẳng – Đoàn tàu",
       "duration": "Thời gian làm bài: 150 phút",
-      "hasEssayKey": false
+      "hasEssayKey": true
     },
     {
       "num": 10,
@@ -98,7 +98,7 @@
       "subject": "Môn: KHOA HỌC TỰ NHIÊN",
       "focus": "Chủ đề trọng tâm: Tổng hợp nâng cao: Thủy điện tích năng – Lăng kính phản xạ toàn phần – Thấu kính + gương – Vòng dây",
       "duration": "Thời gian làm bài: 150 phút",
-      "hasEssayKey": false
+      "hasEssayKey": true
     }
   ]
 }
